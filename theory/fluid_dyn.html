@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steady Stokes &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Elements of Functional Analysis" href="finite_elem.html" />
+    <link rel="prev" title="Neutronics" href="neutronics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theory.html">Theory</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="neutronics.html">     Neutronics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">     Fluid Dynamics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#derivation-of-the-linear-system">Derivation of the linear system</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finite_elem.html">     Finite Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../theory.html">Theory</a></li>
+      <li class="breadcrumb-item active">Steady Stokes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/fluid_dyn.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="steady-stokes">
+<h1>Steady Stokes<a class="headerlink" href="#steady-stokes" title="Link to this heading"></a></h1>
+<p>The Stokes equations describes the flows of incompressible viscous fluid when the importance of inertia is low with respect to viscous forces</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left\{
+\begin{array}{ll}
+\nu\Delta \mathbf{u}-\nabla p = 0 &amp; \mbox{in }\Omega\\
+\nabla\cdot \mathbf{u} = 0 &amp; \mbox{in }\Omega\\
+\mathbf{u}=\mathbf{u}_D &amp; \mbox{on }\Gamma_D\\
+\nu\frac{\partial \mathbf{u}}{\partial \mathbf{n}}-p\mathbf{n}=g\mathbf{n} &amp; \mbox{on }\Gamma_N
+\end{array}
+\right.
+\end{split}\]</div>
+<p>This problem has a saddle point structure, making its numerical solution non-trivial.</p>
+<p>Before entering into the details of the Galerkin problem let us derive the weak formulation.
+Let <span class="math notranslate nohighlight">\(\mathcal{V}\subset[\mathcal{H}^1]^d,\; \mathcal{V}_0[\subset\mathcal{H}^1]^d\)</span> the velocity trial and test spaces defined as</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{V} = \left\{\mathbf{v}\in[\mathcal{H}^1(\Omega)]^d:\;\left. \mathbf{v}\right|_{\Gamma_D} = \mathbf{u}_D\right\}\qquad 
+\mathcal{V}_0 = \left\{\mathbf{v}\in[\mathcal{H}^1(\Omega)]^d:\;\left. \mathbf{v}\right|_{\Gamma_D} = \mathbf{0}\right\}
+\]</div>
+<p>and let <span class="math notranslate nohighlight">\(\mathcal{Q}= L^2(\Omega)\)</span> the pressure trial and test space. The momentum equation can be multiplied by the test function <span class="math notranslate nohighlight">\(\mathbf{v}\in\mathcal{V}_0\)</span> and the integration by parts is applied</p>
+<div class="math notranslate nohighlight">
+\[
+-\int_\Omega \nu\nabla \mathbf{u}\cdot \nabla\mathbf{v}\,d\Omega +\int_\Omega p \nabla\cdot \mathbf{v}\,d\Omega + \int_{\partial\Omega} \left(\nu\frac{\partial \mathbf{u}}{\partial \mathbf{n}}-p\mathbf{n}\right)\cdot \mathbf{v}\,d\sigma=0
+\]</div>
+<p>whereas the continuity equation is multiplied by <span class="math notranslate nohighlight">\(q\in\mathcal{Q}\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\int_\Omega q \nabla\cdot \mathbf{u}\,d\Omega=0
+\]</div>
+<p>Imposing the boundary conditions, the weak formulation reads: <em>find <span class="math notranslate nohighlight">\((\mathbf{u}, p)\in\mathcal{V}\times\mathcal{Q}\)</span> s.t.</em></p>
+<div class="amsmath math notranslate nohighlight" id="equation-845228fd-3708-4896-bc24-d58a9e396879">
+<span class="eqno">(1)<a class="headerlink" href="#equation-845228fd-3708-4896-bc24-d58a9e396879" title="Permalink to this equation"></a></span>\[\begin{equation}
+\int_\Omega \nu\nabla \mathbf{u}\cdot \nabla\mathbf{v}\,d\Omega -\int_\Omega p \nabla\cdot \mathbf{v}\,d\Omega - \int_\Omega q \nabla\cdot \mathbf{u}\,d\Omega =  \int_{\Gamma_N} g\mathbf{n}\cdot \mathbf{v}\,d\sigma \qquad \forall (\mathbf{v}, q)\in\mathcal{V}_0\times\mathcal{Q}
+\end{equation}\]</div>
+<section id="derivation-of-the-linear-system">
+<h2>Derivation of the linear system<a class="headerlink" href="#derivation-of-the-linear-system" title="Link to this heading"></a></h2>
+<p>When the finite dimensional spaces are introduced an important remark should be made. The Galerkin problem has a stable solution <span class="math notranslate nohighlight">\((\mathbf{u}_h,p_h)\)</span> if the finite dimensional spaces are <em>inf-sup</em> compatible. In fact, there exists a connection between the finite dimensional functional space of velocity and pressure referred to as the Taylor-Hood compatible spaces.
+In order to have a stable solution <span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="Alfio Quarteroni. Numerical Models for Differential Problems. Springer, Cham, iii edition, 2016.">Qua16</a>]</span>, the most common couple is given by parabolic FE <span class="math notranslate nohighlight">\(P2\)</span> for the velocity and linear finite element for pressure <span class="math notranslate nohighlight">\(P1\)</span>.</p>
+<p>Let us consider the finite dimensional representation of the spaces (using Taylor-Hood elements), the correspondent linear system results in</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4bff188a-2fe2-4420-989f-61a9098ce7e8">
+<span class="eqno">(2)<a class="headerlink" href="#equation-4bff188a-2fe2-4420-989f-61a9098ce7e8" title="Permalink to this equation"></a></span>\[\begin{equation}
+\left[
+\begin{array}{cc}
+A &amp; B^T \\ B &amp; 0
+\end{array}
+\right]\cdot
+\left[
+\begin{array}{c}
+\mathbf{U} \\ \mathbf{P}
+\end{array}
+\right] = 
+\left[
+\begin{array}{c}
+\mathbf{F} \\ \mathbf{0}
+\end{array}
+\right]
+\end{equation}\]</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="neutronics.html" class="btn btn-neutral float-left" title="Neutronics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="finite_elem.html" class="btn btn-neutral float-right" title="Elements of Functional Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

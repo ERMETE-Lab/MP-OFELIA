@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PWR Pin 2D Axial Symmetry - Solution &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/proof.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="PWR Pin 2D Axial Symmetry - Post Process" href="plotRes.html" />
+    <link rel="prev" title="TRIGA Mark II Reactor" href="../../openmc/TRIGA/triga.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../solvers.html">Solvers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials.html#fenicsx">FEniCSx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials.html#openmc">OpenMC</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../tutorials.html#ofelia">OFELIA</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PWR Pin 2D Axial Symmetry - Solution</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RUN">RUN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Post-Processing-and-data-storing">Post-Processing and data storing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="plotRes.html">PWR Pin 2D Axial Symmetry - Post Process</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">PWR Pin 2D Axial Symmetry - Solution</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/Tutorials/ofelia/pin3D_PWR_steady/pin3D.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="PWR-Pin-2D-Axial-Symmetry---Solution">
+<h1>PWR Pin 2D Axial Symmetry - Solution<a class="headerlink" href="#PWR-Pin-2D-Axial-Symmetry---Solution" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">mesh_path</span>      <span class="o">=</span> <span class="s1">&#39;../../../mesh/&#39;</span>
+<span class="n">benchmark_path</span> <span class="o">=</span> <span class="s1">&#39;../../../BenchmarkData/&#39;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../models/&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ofelia.aux_obj</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+</pre></div>
+</div>
+</div>
+<p>Setting OpenMC materials</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># from ofelia.constants import *</span>
+<span class="kn">from</span> <span class="nn">ofelia.materials</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># importing parameters and OpenMC materials</span>
+
+<span class="n">path_res</span> <span class="o">=</span> <span class="s1">&#39;./results_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n_div</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;div_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Power</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;kW/&#39;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path_res</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;mkdir &quot;</span><span class="o">+</span><span class="n">path_res</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The number of axial divisions is &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_div</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The pin power is set to &#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Power</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; kW&#39;</span><span class="p">)</span>
+
+<span class="n">xml_materials</span> <span class="o">=</span> <span class="n">updateXML</span><span class="p">(</span><span class="n">mat_dict</span><span class="p">,</span> <span class="n">n_div</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The number of axial divisions is 8
+The pin power is set to 65.0 kW
+</pre></div></div>
+</div>
+<p>Setting simulation parameters for FEniCSx</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ofelia.thermal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">dolfinx.io</span> <span class="kn">import</span> <span class="n">gmshio</span>
+<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+<span class="kn">import</span> <span class="nn">gmsh</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+
+<span class="n">gdim</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">model_rank</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">mesh_comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+
+<span class="n">mesh_factor</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="c1"># Initialize the gmsh module</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+
+<span class="c1"># Load the .geo file</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">mesh_path</span><span class="o">+</span><span class="s1">&#39;pin2D_pwr.geo&#39;</span><span class="p">)</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+
+<span class="n">gmsh</span><span class="o">.</span><span class="n">option</span><span class="o">.</span><span class="n">setNumber</span><span class="p">(</span><span class="s2">&quot;Mesh.MeshSizeFactor&quot;</span><span class="p">,</span> <span class="n">mesh_factor</span><span class="p">)</span>
+
+<span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">gdim</span><span class="p">)</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="s2">&quot;Netgen&quot;</span><span class="p">)</span>
+
+<span class="c1"># Domain</span>
+<span class="n">domain</span><span class="p">,</span> <span class="n">ct</span><span class="p">,</span> <span class="n">ft</span> <span class="o">=</span> <span class="n">gmshio</span><span class="o">.</span><span class="n">model_to_mesh</span><span class="p">(</span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">comm</span> <span class="o">=</span> <span class="n">mesh_comm</span><span class="p">,</span> <span class="n">rank</span> <span class="o">=</span> <span class="n">model_rank</span><span class="p">,</span> <span class="n">gdim</span> <span class="o">=</span> <span class="n">gdim</span> <span class="p">)</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+
+<span class="n">clear_output</span><span class="p">()</span>
+
+<span class="n">fdim</span> <span class="o">=</span> <span class="n">gdim</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">domain</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">create_connectivity</span><span class="p">(</span><span class="n">fdim</span><span class="p">,</span> <span class="n">gdim</span><span class="p">)</span>
+
+<span class="n">region_markers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c1"># 1: fuel, 2: helium, 3: cladding</span>
+
+<span class="c1"># Boundary Markers</span>
+<span class="n">water_out_marker</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">inl_marker</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">out_marker</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1"># The thermal conducticity of the helium gap is increased to consider the radiation HT</span>
+<span class="n">th_input</span> <span class="o">=</span> <span class="n">thermal_inputs</span><span class="p">(</span><span class="n">T_w_average</span><span class="p">,</span> <span class="n">pressure</span><span class="p">)</span>
+<span class="n">physical_param</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;th_cond&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">16.23</span><span class="p">])</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">,</span> <span class="c1"># W/cm-K</span>
+                  <span class="s1">&#39;htc&#39;</span><span class="p">:</span> <span class="n">th_input</span><span class="o">.</span><span class="n">compute_htc</span><span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">clad_or</span><span class="p">,</span> <span class="n">u_in</span><span class="p">)}</span>
+
+<span class="c1"># Defining and assembling the linear structures for the Thermal Calculations</span>
+<span class="n">TH</span> <span class="o">=</span> <span class="n">thermal_solver</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">ct</span><span class="p">,</span> <span class="n">ft</span><span class="p">,</span>
+                    <span class="n">physical_param</span><span class="p">,</span> <span class="n">region_markers</span><span class="p">,</span> <span class="n">water_out_marker</span><span class="p">)</span>
+<span class="n">TH</span><span class="o">.</span><span class="n">assemble</span><span class="p">()</span>
+
+<span class="n">Vnorms</span> <span class="o">=</span> <span class="n">norms</span><span class="p">(</span><span class="n">TH</span><span class="o">.</span><span class="n">funSpace</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="RUN">
+<h2>RUN<a class="headerlink" href="#RUN" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;cat ../../../models/ofelia/header&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">                   -- Simulation Start --</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Picard settings initialization</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">error</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">s1_val</span>
+<span class="n">sum_s</span> <span class="o">=</span> <span class="n">s1</span>
+
+<span class="c1"># Guess temperature for the Picard Loop</span>
+<span class="n">Tguess_w</span> <span class="o">=</span> <span class="n">Tin</span>
+<span class="n">Tguess_f</span> <span class="o">=</span> <span class="mf">273.15</span> <span class="o">+</span> <span class="mi">600</span>
+
+<span class="n">Tguess</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Tguess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_div</span><span class="p">,))</span> <span class="o">*</span> <span class="n">Tguess_f</span><span class="p">)</span>
+<span class="n">Tguess</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_div</span><span class="p">,))</span> <span class="o">*</span> <span class="n">Tguess_w</span><span class="p">)</span>
+
+<span class="c1"># Defining class to convert power from OpenMC to FEniCSx</span>
+<span class="n">ExtractPower</span> <span class="o">=</span> <span class="n">extract_power</span><span class="p">(</span><span class="n">n_div</span><span class="p">,</span> <span class="n">Power</span><span class="p">,</span> <span class="n">meshSize</span><span class="p">,</span> <span class="n">pin_length</span><span class="p">,</span> <span class="n">pin_r</span><span class="p">,</span> <span class="n">J_to_eV</span><span class="p">,</span> <span class="n">tallyDict</span><span class="p">)</span>
+
+<span class="c1"># The division in slices acts only on the active region</span>
+<span class="n">slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">l_active</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">l_active</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_div</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># regLogic = parameters.assign(is_fuel + 2 * is_helium + 3 * is_clad + 4 * is_water + 5 * is_graph + 273.15)</span>
+<span class="c1"># TH.plot2D(regLogic, L, pitch, &#39;pictures/regions&#39;)</span>
+
+<span class="c1">#Define input folder path</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+<span class="n">phiE_list</span> <span class="o">=</span> <span class="p">[[],</span> <span class="p">[]]</span> <span class="c1"># mean, unc</span>
+
+<span class="n">q3_relaxed_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">q3_std_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">z_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">alpha_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">pop_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">s1</span><span class="p">]</span>
+<span class="n">errors_q3_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">T_old</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">TH</span><span class="o">.</span><span class="n">funSpace</span><span class="p">)</span>
+<span class="n">T_old</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.</span> <span class="o">+</span> <span class="n">Tin</span><span class="p">)</span>
+
+<span class="c1">## Set computational time</span>
+<span class="n">comp_time</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">start_cpu_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">process_time</span><span class="p">()</span>
+
+<span class="c1"># os.system(&#39;python ../../../models/ofelia/build_xml.py&#39;)</span>
+<span class="kn">from</span> <span class="nn">ofelia.build_xml</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">RemoveFolders</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tguess: fuel = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; °C, water = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; °C&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tolerance for convergence: </span><span class="si">{:.2e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tol</span><span class="p">))</span>
+<span class="c1">#print(&#39;Under relaxation constant: {:.2f}&#39;.format(alpha))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Iter #</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">0</span><span class="si">:</span><span class="s1">02</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">input_folder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/build_xml/it&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="c1">#Run the simulation</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Running OpenMC&#39;</span><span class="p">)</span>
+    <span class="n">openmc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cwd</span><span class="o">=</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#Rename the output with the info</span>
+    <span class="n">old_sp_name</span> <span class="o">=</span> <span class="s1">&#39;statepoint.&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.h5&#39;</span>
+    <span class="n">old_sp_path</span> <span class="o">=</span> <span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span><span class="n">old_sp_name</span>
+
+    <span class="n">new_sp_name</span> <span class="o">=</span> <span class="s1">&#39;statepoint.&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.it&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.h5&#39;</span>
+    <span class="n">new_sp_path</span> <span class="o">=</span> <span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span><span class="n">new_sp_name</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;mv &#39;</span> <span class="o">+</span> <span class="n">old_sp_path</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">new_sp_path</span><span class="p">)</span>
+
+    <span class="c1">#Collecting the output (for simplicity, the k)</span>
+    <span class="n">sp</span><span class="o">=</span><span class="n">openmc</span><span class="o">.</span><span class="n">StatePoint</span><span class="p">(</span><span class="n">new_sp_path</span><span class="p">)</span>
+
+    <span class="c1"># Get the energy flux from the iteration</span>
+    <span class="n">phiE_list</span><span class="p">,</span> <span class="n">EnergyStairs</span> <span class="o">=</span> <span class="n">ExtractPower</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">phiE_list</span><span class="p">)</span>
+
+    <span class="c1"># Get the axial power density from the iteration</span>
+    <span class="n">q3_unrelaxed</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">q3std</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="n">ExtractPower</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">q3_integral</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">q3_unrelaxed</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">uq3_integral</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">q3std</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">   Input Pin Power: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Power</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; kW&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   Pin Power calculated (MC): </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="n">q3_integral</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; +- </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="n">uq3_integral</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; kW</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">q3_relaxed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q3_unrelaxed</span><span class="p">)</span>
+        <span class="n">q3_relaxed</span> <span class="o">=</span> <span class="n">q3_unrelaxed</span>
+        <span class="n">q3_std_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q3std</span><span class="p">)</span>
+        <span class="n">z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="c1"># Under Relaxation</span>
+        <span class="n">sn</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span><span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s1</span><span class="o">*</span><span class="n">s1</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">s1</span> <span class="o">*</span> <span class="n">sum_s</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">sum_s</span><span class="o">=</span><span class="n">sn</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">sn</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span><span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">s1</span><span class="o">*</span><span class="n">s1</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">s1</span> <span class="o">*</span> <span class="n">sum_s</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">sum_s</span> <span class="o">=</span> <span class="n">sum_s</span> <span class="o">+</span> <span class="n">sn</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">sn</span><span class="o">/</span><span class="n">sum_s</span>
+
+        <span class="n">alpha_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="n">pop_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sn</span><span class="p">)</span>
+
+        <span class="n">q3_relaxed</span> <span class="o">=</span> <span class="n">q3_unrelaxed</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">q3_relaxed_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">errors_q3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span> <span class="p">(</span><span class="n">q3_relaxed</span> <span class="o">-</span> <span class="n">q3_relaxed_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span> <span class="p">(</span><span class="n">q3_relaxed</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">errors_q3_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">errors_q3</span><span class="p">)</span>
+
+        <span class="n">q3_relaxed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q3_relaxed</span><span class="p">)</span>
+        <span class="n">q3_std_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q3std</span><span class="p">)</span>
+
+
+    <span class="c1">#Print the k value at the iteration</span>
+    <span class="n">k_eff</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">keff</span>
+    <span class="n">keff</span> <span class="o">=</span> <span class="n">k_eff</span><span class="o">.</span><span class="n">n</span>
+    <span class="n">ukeff</span> <span class="o">=</span> <span class="n">k_eff</span><span class="o">.</span><span class="n">std_dev</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   keff: </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keff</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; +- </span><span class="si">{:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ukeff</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   alpha = </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   Next pop size = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">sn</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39; (neutrons/cycle)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># np.savetxt(path + &#39;/build_xml/it&#39; + str(i) + &#39;/q3_it&#39; + str(i)+&#39;.txt&#39;, np.vstack([q3, z]))</span>
+    <span class="c1"># power_fun = importq3(path + &#39;/build_xml/it&#39; + str(i) + &#39;/q3_it&#39; + str(i)) # W/cm3</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Running FEniCSx&#39;</span><span class="p">)</span>
+    <span class="n">power_fun</span><span class="p">,</span> <span class="n">Tb_fun</span><span class="p">,</span> <span class="n">res_bulk</span> <span class="o">=</span> <span class="n">th_input</span><span class="o">.</span><span class="n">mapping_q3_Tb</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">q3_relaxed</span><span class="p">,</span> <span class="n">Tin</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">l_active</span><span class="p">,</span> <span class="n">fuel_or</span><span class="p">)</span>
+    <span class="n">T_sol</span> <span class="o">=</span> <span class="n">TH</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">power_fun</span><span class="p">,</span> <span class="n">Tb_fun</span><span class="p">)</span>
+
+    <span class="c1"># Computing regional average temperature</span>
+    <span class="n">average_T</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">average_T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TH</span><span class="o">.</span><span class="n">computeSolidAverageT</span><span class="p">(</span><span class="n">region_markers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">T_sol</span><span class="p">,</span> <span class="n">slices</span><span class="p">))</span>
+
+    <span class="n">dimz_full</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">dimz_full</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dimz_full</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">100</span>
+    <span class="n">average_T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">th_input</span><span class="o">.</span><span class="n">computeWaterAverageT</span><span class="p">(</span><span class="n">slices</span><span class="p">,</span> <span class="n">dimz_full</span><span class="p">))</span>
+
+    <span class="c1"># Computing regional errors</span>
+    <span class="n">errors_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">average_T</span><span class="p">,)))</span>
+    <span class="k">for</span> <span class="n">mat_ID</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">average_T</span><span class="p">)):</span>
+        <span class="n">errors_mat</span><span class="p">[</span><span class="n">mat_ID</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">average_T</span><span class="p">[</span><span class="n">mat_ID</span><span class="p">]</span> <span class="o">-</span> <span class="n">Tguess</span><span class="p">[</span><span class="n">mat_ID</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="n">mat_ID</span><span class="p">])</span>
+
+    <span class="c1"># Check convergence: maxIter vs error &lt; tol?</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors_mat</span><span class="p">)</span>
+    <span class="n">error_L2</span> <span class="o">=</span> <span class="n">Vnorms</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">T_sol</span> <span class="o">-</span> <span class="n">T_old</span><span class="p">)</span> <span class="o">/</span> <span class="n">Vnorms</span><span class="o">.</span><span class="n">L2norm</span><span class="p">(</span><span class="n">T_old</span><span class="p">)</span>
+
+    <span class="n">Tguess</span> <span class="o">=</span> <span class="n">average_T</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">T_old</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">T_sol</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   Temperature regional average error: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">:</span><span class="s1">.2e</span><span class="si">}</span><span class="s1"> | relative L2 error: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">error_L2</span><span class="p">)</span><span class="si">:</span><span class="s1">.2e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   Power density: relative L2 error </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">errors_q3</span><span class="p">)</span><span class="si">:</span><span class="s1">.3e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">error</span> <span class="o">+=</span> <span class="n">errors_q3</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   Average T_fuel: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> °C | Average T_water: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mf">273.15</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> °C</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">error</span> <span class="o">=</span> <span class="n">errors_q3_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">errors_q3_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+        <span class="n">xml_materials</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Tguess</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Tguess</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sn</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">maxIter</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;###############################################################&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: Maximum Number of iteration reached!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+##################################################################
+##                                                              ##
+##          OOO   FFFFF  EEEEEE   L      III       A            ##
+##         O   O  F      E        L       I       A A           ##
+##        O     O F      E        L       I      AAAAA          ##
+##        O     O FFFF   EEEEEE   L       I     A     A         ##
+##        O     O F      E        L       I     AAAAAAA         ##
+##         O   O  F      E        L       I    A       A        ##
+##          OOO   F      EEEEEEE  LLLLL  III  A         A       ##
+##                                                              ##
+##################################################################
+##                                                              ##
+##           Openmc-FEnicsx for muLtiphysics tutorIAl           ##
+##                          -------                             ##
+##             ERMETE Lab - Politecnico di Milano               ##
+##                                                              ##
+##       GitHub: https://github.com/ERMETE-Lab/MP-OFELIA        ##
+##                                                              ##
+##################################################################
+
+
+                   -- Simulation Start --
+
+Tguess: fuel = 600.00 °C, water = 290.00 °C
+Tolerance for convergence: 5.00e-02
+
+Iter #00
+  Running OpenMC
+
+   Input Pin Power: 65.00 kW
+   Pin Power calculated (MC): 67.0096 +- 1.75 kW
+
+   keff: 1.380605 +- 0.001630
+   alpha = 1.0000
+   Next pop size = 1214 (neutrons/cycle)
+
+  Running FEniCSx
+   Temperature regional average error: 1.60e-01 | relative L2 error: 8.60e-01
+   Average T_fuel: 741.78 °C | Average T_water: 307.00 °C
+
+Iter #01
+  Running OpenMC
+   keff: 1.360200 +- 0.001300
+   alpha = 0.5357
+   Next pop size = 1400 (neutrons/cycle)
+
+  Running FEniCSx
+   Temperature regional average error: 9.17e-02 | relative L2 error: 1.83e-01
+   Power density: relative L2 error 3.985e-01
+   Average T_fuel: 744.00 °C | Average T_water: 310.47 °C
+
+Iter #02
+  Running OpenMC
+   keff: 1.355326 +- 0.001248
+   alpha = 0.4111
+   Next pop size = 1824 (neutrons/cycle)
+
+  Running FEniCSx
+   Temperature regional average error: 1.27e-02 | relative L2 error: 2.56e-02
+   Power density: relative L2 error 5.613e-02
+   Average T_fuel: 743.73 °C | Average T_water: 309.98 °C
+
+Iter #03
+  Running OpenMC
+   keff: 1.354819 +- 0.001075
+   alpha = 0.3352
+   Next pop size = 2238 (neutrons/cycle)
+
+  Running FEniCSx
+   Temperature regional average error: 8.20e-03 | relative L2 error: 1.67e-02
+   Power density: relative L2 error 3.630e-02
+   Average T_fuel: 744.02 °C | Average T_water: 310.21 °C
+
+</pre></div></div>
+</div>
+</section>
+<section id="Post-Processing-and-data-storing">
+<h2>Post-Processing and data storing<a class="headerlink" href="#Post-Processing-and-data-storing" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">dolfinx.io</span> <span class="kn">import</span> <span class="n">XDMFFile</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+  <span class="s2">&quot;text.usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span>
+<span class="p">})</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.latex.preamble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\usepackage</span><span class="si">{amssymb}</span><span class="s1"> \usepackage</span><span class="si">{amsmath}</span><span class="s1"> \usepackage</span><span class="si">{amsthm}</span><span class="s1"> \usepackage</span><span class="si">{mathtools}</span><span class="s1">&#39;</span>
+
+<span class="n">comp_time</span><span class="p">[</span><span class="s1">&#39;Wall time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span>
+<span class="n">comp_time</span><span class="p">[</span><span class="s1">&#39;CPU time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">process_time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_cpu_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computational wall time = </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">comp_time</span><span class="p">[</span><span class="s1">&#39;Wall time&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; minutes&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computational CPU time = </span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">comp_time</span><span class="p">[</span><span class="s1">&#39;CPU time&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; minutes&#39;</span><span class="p">)</span>
+
+<span class="c1"># Temperature storage in .h5 format</span>
+<span class="k">with</span> <span class="n">XDMFFile</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;T_sol.xdmf&#39;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">loc</span><span class="p">:</span>
+  <span class="n">T_sol</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+  <span class="n">loc</span><span class="o">.</span><span class="n">write_mesh</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+  <span class="n">loc</span><span class="o">.</span><span class="n">write_function</span><span class="p">(</span><span class="n">T_sol</span><span class="p">)</span>
+
+<span class="c1"># Data store using numpy arrays</span>
+<span class="n">res2d</span> <span class="o">=</span> <span class="n">TH</span><span class="o">.</span><span class="n">extract_2D_data</span><span class="p">(</span><span class="n">T_sol</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">clad_or</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;results.pin&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="n">comp_time</span><span class="p">,</span> <span class="n">res_bulk</span><span class="p">,</span> <span class="n">Tguess</span><span class="p">,</span> <span class="n">res2d</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># Write axial power to txt</span>
+<span class="n">zWrite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">total_length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">total_length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span>
+<span class="n">q_to_write</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">zWrite</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">q_to_write</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">zWrite</span><span class="p">[:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">q_to_write</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">power_fun</span><span class="p">(</span><span class="n">zWrite</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;axial_powerDensity.txt&#39;</span><span class="p">,</span> <span class="n">q_to_write</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+<span class="c1"># Write L2 error in taking the axial steps</span>
+<span class="c1"># step_errors = np.zeros((4,))</span>
+<span class="c1"># step_errors[0], step_errors[2] = TH.FuelAxError(T_sol, average_T, L_active, fuel_or, slices)</span>
+<span class="c1"># step_errors[1], step_errors[3] = TH.WaterAxError(T_sol, average_T, L_active, clad_or, pitch, slices)</span>
+<span class="c1"># np.savetxt(&#39;T_L2error_axsteps.txt&#39;, step_errors, delimiter=&#39;,&#39;)</span>
+
+<span class="c1"># Under relaxation plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span> <span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop_list</span><span class="p">)),</span> <span class="n">pop_list</span><span class="p">,</span> <span class="s1">&#39;--o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$S_n$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;MC population (n/cycle)&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration $i$&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors_q3_list</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#plt.legend(fontsize = 15)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;PopSizeIt.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span> <span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alpha_list</span><span class="p">)),</span> <span class="n">alpha_list</span><span class="p">,</span> <span class="s1">&#39;--*&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\alpha$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Under relaxation factor&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors_q3_list</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration $i$&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#plt.legend(fontsize = 15)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;AlphaIt.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span> <span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors_q3_list</span><span class="p">)),</span> <span class="n">errors_q3_list</span><span class="p">,</span> <span class="s1">&#39;--x&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$ \frac{\lVert (q&#39;&#39;&#39;_i - q&#39;&#39;&#39;_{i-1}) \rVert_{L^2}}{ \lVert q&#39;&#39;&#39;_i \rVert_{L^2}}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">tol</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Threshold&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">errors_q3_list</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration $i$&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Relative $L^2$ Error&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;ErrorsIt.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="c1"># Plot flux spectrum</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">iCol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">iCol</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span> <span class="n">EnergyStairs</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;it &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="o">*</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span> <span class="n">EnergyStairs</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">phiE_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Energy (eV)&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Neutron fluence per unit lethargy $\left(\frac{\text</span><span class="si">{n}</span><span class="s1">}{\text</span><span class="si">{cm}</span><span class="s1">^2 \, \cdot \, \text</span><span class="si">{part}</span><span class="s1">} \right)$&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">framealpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_res</span><span class="o">+</span><span class="s1">&#39;phiE.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Computational wall time = 2.9910 minutes
+Computational CPU time = 0.1665 minutes
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../openmc/TRIGA/triga.html" class="btn btn-neutral float-left" title="TRIGA Mark II Reactor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plotRes.html" class="btn btn-neutral float-right" title="PWR Pin 2D Axial Symmetry - Post Process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

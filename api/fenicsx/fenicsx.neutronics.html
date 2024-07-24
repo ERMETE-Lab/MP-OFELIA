@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fenicsx.neutronics package &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorials" href="../../tutorials.html" />
+    <link rel="prev" title="fenicsx.fluid_dynamics package" href="fenicsx.fluid_dynamics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="fenicsx.html">API-FEniCSx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="fenicsx.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html">fenicsx.fluid_dynamics package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">fenicsx.neutronics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx.backends">fenicsx.backends module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx.plotting">fenicsx.plotting module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../solvers.html">Solvers</a></li>
+          <li class="breadcrumb-item"><a href="fenicsx.html">fenicsx package</a></li>
+      <li class="breadcrumb-item active">fenicsx.neutronics package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/fenicsx/fenicsx.neutronics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fenicsx-neutronics-package">
+<h1>fenicsx.neutronics package<a class="headerlink" href="#fenicsx-neutronics-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-fenicsx.neutronics.neutr_diff">
+<span id="fenicsx-neutronics-neutr-diff-module"></span><h2>fenicsx.neutronics.neutr_diff module<a class="headerlink" href="#module-fenicsx.neutronics.neutr_diff" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.steady_neutron_diff">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.neutronics.neutr_diff.</span></span><span class="sig-name descname"><span class="pre">steady_neutron_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">void_bound_marker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">albedo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#steady_neutron_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.steady_neutron_diff" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>”
+This class implements the solution of the steady multigroup neutron diffusion equation through the <span class="math notranslate nohighlight">\(k\)</span>-eigenvalue method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<em>dolfinx.mesh.Mesh</em>) – Mesh imported.</p></li>
+<li><p><strong>ct</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Cell tags of the regions in the domain.</p></li>
+<li><p><strong>ft</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Face tags of the boundaries.</p></li>
+<li><p><strong>physical_param</strong> (<em>dict</em>) – Dictionary with the main physical parameters at reference condition.</p></li>
+<li><p><strong>regions_markers</strong> (<em>dict</em>) – List of the region markers inside the domain.</p></li>
+<li><p><strong>void_bound_marker</strong> (<em>int</em>) – Integer describing the index of the void boundary.</p></li>
+<li><p><strong>albedo</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(\gamma\)</span>, must be an array of <span class="math notranslate nohighlight">\(G\)</span>, as the energy groups, to impose the following BC <span class="math notranslate nohighlight">\(-D_g\nabla \phi_g\cdot \mathbf{n} = \gamma \phi_g\)</span>.</p></li>
+<li><p><strong>coupling</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it indicates the type of coupling with the temperature: <em>log</em> and <em>sqrt</em> are available.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.steady_neutron_diff.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#steady_neutron_diff.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.steady_neutron_diff.assembleForm" title="Link to this definition"></a></dt>
+<dd><p>This function assembles the variational forms and the correspondent linear algebra structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>direct</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default=True</em><em>)</em>) – If <cite>True</cite>, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.steady_neutron_diff.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.41</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.2e-11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxIter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LL</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#steady_neutron_diff.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.steady_neutron_diff.solve" title="Link to this definition"></a></dt>
+<dd><p>This function implements the <span class="math notranslate nohighlight">\(k\)</span>-eigenvalue method: starting from an initial non-trivial guess of eigenvalue-eigenvector pair <span class="math notranslate nohighlight">\(\left(k_{\text{eff}}^{(0)},\,\boldsymbol{\phi}^{(0)}\right)\)</span>, at each iteration <span class="math notranslate nohighlight">\(n\geq 1\)</span> the following linear system is solved</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{A}\boldsymbol{\phi}^{(n)} = \frac{1}{k_{\text{eff}}^{(n-1)}} \mathbb{B}\boldsymbol{\phi}^{(n-1)}\]</div>
+<p>The convergence check is made on the relative difference for the eigenvalue as</p>
+<div class="math notranslate nohighlight">
+\[\frac{|k_{\text{eff}}^{(n)} - k_{\text{eff}}^{(n-1)}|}{k_{\text{eff}}^{(n)}} &lt; \epsilon\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>dolfinx.fem.Function</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – Temperature field as a <cite>dolfinx.fem.Function</cite>.</p></li>
+<li><p><strong>power</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = 1</em><em>)</em>) – Power level <span class="math notranslate nohighlight">\(P\)</span> used to normalise the flux as <span class="math notranslate nohighlight">\(P = \displaystyle\int_V E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g \, dV\)</span>.</p></li>
+<li><p><strong>nu</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = 2.41</em><em>)</em>) – Number of neutrons emitted by the fission event.</p></li>
+<li><p><strong>Ef</strong> (float, optional (Default = <cite>1.6e-19 * 200e6</cite>)) – Energy released by the fission event.</p></li>
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = 1e-10</em><em>)</em>) – Tolerance of the inverse power method, <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p></li>
+<li><p><strong>maxIter</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>Default = 200</em><em>)</em>) – Maximum iteration for the inverse power method.</p></li>
+<li><p><strong>LL</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>Default = 50</em><em>)</em>) – Frequency for printing the output.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default = False</em><em>)</em>) – If <cite>True</cite>, the output is printed every <cite>LL</cite> iterations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>normalised_fluxes</strong> (<em>list[dolfinx.fem.Function]</em>) – List of <cite>dolfinx.fem.Function</cite> with the solution of the inverse power method.</p></li>
+<li><p><strong>k_eff_</strong> (<em>float</em>) – Converged eigenvalue.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.steady_neutron_diff.update_xs">
+<span class="sig-name descname"><span class="pre">update_xs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#steady_neutron_diff.update_xs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.steady_neutron_diff.update_xs" title="Link to this definition"></a></dt>
+<dd><p>This function updates the cross sections according to the coupling scheme chosen.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.transient_neutron_diff">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.neutronics.neutr_diff.</span></span><span class="sig-name descname"><span class="pre">transient_neutron_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">void_bound_marker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">albedo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#transient_neutron_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.transient_neutron_diff" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>”
+This class implements the solution of the transient multigroup neutron diffusion equation coupled with the precursors equations with a semi-implicit first-order advancement scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<em>dolfinx.mesh.Mesh</em>) – Mesh imported.</p></li>
+<li><p><strong>ct</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Cell tags of the regions in the domain.</p></li>
+<li><p><strong>ft</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Face tags of the boundaries.</p></li>
+<li><p><strong>physical_param</strong> (<em>dict</em>) – Dictionary with the main physical parameters at reference condition.</p></li>
+<li><p><strong>regions_markers</strong> (<em>dict</em>) – List of the region markers inside the domain.</p></li>
+<li><p><strong>void_bound_marker</strong> (<em>int</em>) – Integer describing the index of the void boundary.</p></li>
+<li><p><strong>albedo</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(\gamma\)</span>, must be an array of <span class="math notranslate nohighlight">\(G\)</span>, as the energy groups, to impose the following BC <span class="math notranslate nohighlight">\(-D_g\nabla \phi_g\cdot \mathbf{n} = \gamma \phi_g\)</span>.</p></li>
+<li><p><strong>coupling</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it indicates the type of coupling with the temperature: <em>log</em> and <em>sqrt</em> are available.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.transient_neutron_diff.advance">
+<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_ag_transient_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_prec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#transient_neutron_diff.advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.transient_neutron_diff.advance" title="Link to this definition"></a></dt>
+<dd><p>This function implements a single step forward in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>float</em>) – Time to advance to, say <span class="math notranslate nohighlight">\(t_{n+1}\)</span>.</p></li>
+<li><p><strong>sigma_ag_transient_value</strong> (<em>list</em>) – List of callable function dependent on time used to impose variation of the reactivity.</p></li>
+<li><p><strong>temperature</strong> (<em>dolfinx.fem.Function</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – Temperature field as a <cite>dolfinx.fem.Function</cite>.</p></li>
+<li><p><strong>return_prec</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default = False</em><em>)</em>) – If <cite>True</cite>, the precursors are returned in the solution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>power</strong> (<em>float</em>) – Power at time <span class="math notranslate nohighlight">\(t_{n+1}\)</span>, defined as <span class="math notranslate nohighlight">\(P(t) = \displaystyle\int_V E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g \, dV\)</span>.</p></li>
+<li><p><strong>solution</strong> (<em>list[dolfinx.fem.Function]</em>) – List of <cite>dolfinx.fem.Function</cite> with the output of this time step.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.transient_neutron_diff.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi_ss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dolfinx.fem.Function</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.41</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.2e-11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#transient_neutron_diff.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.transient_neutron_diff.assembleForm" title="Link to this definition"></a></dt>
+<dd><p>This function assembles the variational forms and the correspondent linear algebra structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi_ss</strong> (<em>list</em><em>[</em><em>dolfinx.fem.Function</em>) – List of the steady state group fluxes.</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Time step size.</p></li>
+<li><p><strong>nu</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = 2.41</em><em>)</em>) – Number of neutrons emitted by the fission event.</p></li>
+<li><p><strong>Ef</strong> (float, optional (Default = <cite>1.6e-19 * 200e6</cite>)) – Energy released by the fission event.</p></li>
+<li><p><strong>direct</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default=True</em><em>)</em>) – If <cite>True</cite>, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.neutr_diff.transient_neutron_diff.update_xs">
+<span class="sig-name descname"><span class="pre">update_xs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/neutr_diff.html#transient_neutron_diff.update_xs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.neutr_diff.transient_neutron_diff.update_xs" title="Link to this definition"></a></dt>
+<dd><p>This function updates the cross sections according to the coupling scheme chosen.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fenicsx.neutronics.thermal">
+<span id="fenicsx-neutronics-thermal-module"></span><h2>fenicsx.neutronics.thermal module<a class="headerlink" href="#module-fenicsx.neutronics.thermal" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.steady_thermal_diffusion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.neutronics.thermal.</span></span><span class="sig-name descname"><span class="pre">steady_thermal_diffusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">void_bound_marker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TD</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#steady_thermal_diffusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.steady_thermal_diffusion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class implements the solution of the steady thermal diffusion equation with internal power generation made by neutrons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<em>dolfinx.mesh.Mesh</em>) – Mesh imported.</p></li>
+<li><p><strong>ct</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Cell tags of the regions in the domain.</p></li>
+<li><p><strong>ft</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Face tags of the boundaries.</p></li>
+<li><p><strong>physical_param</strong> (<em>dict</em>) – Dictionary with the main physical parameters at reference condition.</p></li>
+<li><p><strong>regions_markers</strong> (<em>dict</em>) – List of the region markers inside the domain.</p></li>
+<li><p><strong>void_bound_marker</strong> (<em>int</em>) – Integer describing the index of the void boundary onto which BC is imposed (Dirichlet or Robin).</p></li>
+<li><p><strong>h</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(h\)</span>, represents the heat transfer coefficients in Newton’s cooling law.</p></li>
+<li><p><strong>TD</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(T_D\)</span>, represents either the bulk temperature in Newton’s cooling law or the Dirichlet condition to impose.</p></li>
+<li><p><strong>coupling</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it indicates the type of coupling with the temperature: <em>log</em> and <em>sqrt</em> are available.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.steady_thermal_diffusion.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#steady_thermal_diffusion.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.steady_thermal_diffusion.assembleForm" title="Link to this definition"></a></dt>
+<dd><p>This function assembles the variational forms and the correspondent linear algebra structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>direct</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default=True</em><em>)</em>) – If <cite>True</cite>, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.steady_thermal_diffusion.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dolfinx.fem.Function</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_eff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#steady_thermal_diffusion.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.steady_thermal_diffusion.solve" title="Link to this definition"></a></dt>
+<dd><p>This function solves the steady equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>list</em><em>[</em><em>dolfinx.fem.Function</em><em>]</em>) – List of <cite>dolfinx.fem.Function</cite> for the internal power generation, <span class="math notranslate nohighlight">\(q''' = E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g\)</span>.</p></li>
+<li><p><strong>k_eff</strong> (<em>float</em>) – Effective multiplication factor.</p></li>
+<li><p><strong>temperature</strong> (<em>dolfinx.fem.Function</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – Temperature field as a <cite>dolfinx.fem.Function</cite> used to calculate the cross sections.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>solution</strong> – Output of the linear system.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dolfinx.fem.Function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.steady_thermal_diffusion.update_xs">
+<span class="sig-name descname"><span class="pre">update_xs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#steady_thermal_diffusion.update_xs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.steady_thermal_diffusion.update_xs" title="Link to this definition"></a></dt>
+<dd><p>This function updates the cross sections according to the coupling scheme chosen.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.transient_thermal_diffusion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.neutronics.thermal.</span></span><span class="sig-name descname"><span class="pre">transient_thermal_diffusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regions_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">void_bound_marker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TD</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#transient_thermal_diffusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.transient_thermal_diffusion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class implements the solution of the transient thermal diffusion equation with internal power generation made by neutrons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<em>dolfinx.mesh.Mesh</em>) – Mesh imported.</p></li>
+<li><p><strong>ct</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Cell tags of the regions in the domain.</p></li>
+<li><p><strong>ft</strong> (<em>dolfinx.cpp.mesh.MeshTags_int32</em>) – Face tags of the boundaries.</p></li>
+<li><p><strong>physical_param</strong> (<em>dict</em>) – Dictionary with the main physical parameters at reference condition.</p></li>
+<li><p><strong>regions_markers</strong> (<em>dict</em>) – List of the region markers inside the domain.</p></li>
+<li><p><strong>void_bound_marker</strong> (<em>int</em>) – Integer describing the index of the void boundary onto which BC is imposed (Dirichlet or Robin).</p></li>
+<li><p><strong>h</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(h\)</span>, represents the heat transfer coefficients in Newton’s cooling law.</p></li>
+<li><p><strong>TD</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it, denoted as <span class="math notranslate nohighlight">\(T_D\)</span>, represents either the bulk temperature in Newton’s cooling law or the Dirichlet condition to impose.</p></li>
+<li><p><strong>coupling</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – If not <cite>None</cite>, it indicates the type of coupling with the temperature: <em>log</em> and <em>sqrt</em> are available.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.transient_thermal_diffusion.advance">
+<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#transient_thermal_diffusion.advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.transient_thermal_diffusion.advance" title="Link to this definition"></a></dt>
+<dd><p>This function advances in time with a single step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phi</strong> (<em>list</em><em>[</em><em>dolfinx.fem.Function</em><em>]</em>) – List of <cite>dolfinx.fem.Function</cite> for the internal power generation, <span class="math notranslate nohighlight">\(q''' = E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g``\)</span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>solution</strong> – Solution at the new time step..</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dolfinx.fem.Function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.transient_thermal_diffusion.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T_ss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#transient_thermal_diffusion.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.transient_thermal_diffusion.assembleForm" title="Link to this definition"></a></dt>
+<dd><p>This function assembles the variational forms and the correspondent linear algebra structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T_ss</strong> (<em>dolfinx.fem.Function</em>) – Steady solution, i.e. the initial condition.</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Time step size.</p></li>
+<li><p><strong>direct</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>Default=True</em><em>)</em>) – If <cite>True</cite>, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.neutronics.thermal.transient_thermal_diffusion.update_xs">
+<span class="sig-name descname"><span class="pre">update_xs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/neutronics/thermal.html#transient_thermal_diffusion.update_xs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.neutronics.thermal.transient_thermal_diffusion.update_xs" title="Link to this definition"></a></dt>
+<dd><p>This function updates the cross sections according to the coupling scheme chosen.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fenicsx.neutronics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fenicsx.neutronics" title="Link to this heading"></a></h2>
+<p>models/fenicsx/neutronics.</p>
+<p>OFELIA: FEniCSx models for MultiPhysics.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fenicsx.fluid_dynamics.html" class="btn btn-neutral float-left" title="fenicsx.fluid_dynamics package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

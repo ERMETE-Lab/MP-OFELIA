@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fenicsx.fluid_dynamics.steady_ns &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fenicsx.fluid_dynamics.steady_ns</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fenicsx.fluid_dynamics.steady_ns</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Mesh generation</span>
+<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+<span class="kn">import</span> <span class="nn">dolfinx</span>
+<span class="kn">from</span> <span class="nn">dolfinx</span> <span class="kn">import</span> <span class="n">fem</span>
+<span class="kn">from</span> <span class="nn">dolfinx.fem</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Function</span><span class="p">,</span> <span class="n">FunctionSpace</span><span class="p">,</span> <span class="n">dirichletbc</span><span class="p">,</span> <span class="n">locate_dofs_topological</span><span class="p">,</span> 
+                         <span class="n">form</span><span class="p">,</span> <span class="n">assemble_scalar</span><span class="p">,</span> <span class="n">locate_dofs_geometrical</span><span class="p">,</span> <span class="n">apply_lifting</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">ufl</span>
+<span class="kn">from</span> <span class="nn">ufl</span> <span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">div</span><span class="p">,</span> <span class="n">nabla_grad</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
+<span class="kn">from</span> <span class="nn">dolfinx.mesh</span> <span class="kn">import</span> <span class="p">(</span><span class="n">CellType</span><span class="p">,</span> <span class="n">GhostMode</span><span class="p">,</span> <span class="n">create_rectangle</span><span class="p">,</span> <span class="n">locate_entities_boundary</span><span class="p">)</span>
+
+
+<span class="c1"># Function to mark x = 0, x = 1 and y = 0</span>
+<div class="viewcode-block" id="noslip_boundary">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.noslip_boundary">[docs]</a>
+<span class="k">def</span> <span class="nf">noslip_boundary</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">),</span>
+                                       <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)),</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">))</span></div>
+
+
+<span class="c1"># Function to mark the lid (y = 1)</span>
+<div class="viewcode-block" id="lid">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.lid">[docs]</a>
+<span class="k">def</span> <span class="nf">lid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span></div>
+
+
+<span class="c1"># Lid velocity</span>
+<div class="viewcode-block" id="lid_velocity_expression">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.lid_velocity_expression">[docs]</a>
+<span class="k">def</span> <span class="nf">lid_velocity_expression</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span></div>
+
+
+<span class="c1"># Define boundary conditions</span>
+<div class="viewcode-block" id="fixedValueVelocity">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.fixedValueVelocity">[docs]</a>
+<span class="k">class</span> <span class="nc">fixedValueVelocity</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u_fixed</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gdim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_fixed</span> <span class="o">=</span> <span class="n">u_fixed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="c1"># this may be required for time varying velocity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gdim</span> <span class="o">=</span> <span class="n">gdim</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gdim</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScalarType</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gdim</span><span class="p">):</span>
+            <span class="n">values</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_fixed</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+            
+        <span class="k">return</span> <span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl">[docs]</a>
+<span class="k">class</span> <span class="nc">ns_steady_nl</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">ct</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span>
+                       <span class="n">bound_markers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">degree_u</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+
+        <span class="c1"># Domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ft</span> <span class="o">=</span> <span class="n">ft</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">gdim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdim</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bound_markers</span> <span class="o">=</span> <span class="n">bound_markers</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;quadrature_degree&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;dx&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="c1"># Functional Spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P2</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="n">degree_u</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P1</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="n">degree_u</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixEl</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">MixedElement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixEl</span><span class="p">)</span>
+
+        <span class="c1"># Test and trial functions: monolithic</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TestFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dup</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TrialFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span>  <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ns_steady_nl.parameters">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+
+        <span class="c1"># Physical Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">ScalarType</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.set_cavity_bc">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_cavity_bc">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_cavity_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lid_velocity</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lid_velocity</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">lid_velocity_expression</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ft_lid</span> <span class="o">=</span> <span class="n">locate_entities_boundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="n">lid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dofs_lid</span> <span class="o">=</span> <span class="n">locate_dofs_topological</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ft_lid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bc_lid</span> <span class="o">=</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lid_velocity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dofs_lid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">no_slip</span>  <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ft_walls</span> <span class="o">=</span> <span class="n">locate_entities_boundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="n">noslip_boundary</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dofs_walls</span> <span class="o">=</span> <span class="n">locate_dofs_topological</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ft_walls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bc_w</span> <span class="o">=</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no_slip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dofs_walls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zero_p</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zero_p</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dofs_p</span> <span class="o">=</span> <span class="n">locate_dofs_geometrical</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> 
+                                              <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bc_p</span> <span class="o">=</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zero_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dofs_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bc_lid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bc_p</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ns_steady_nl.set_bc">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_bc">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundary_type</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">boundary_value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span> 
+               
+        <span class="c1"># boundary type can be either </span>
+        <span class="c1">#   - 0: inlet, fixed-Value velocity and zero-gradient for pressure</span>
+        <span class="c1">#   - 1: walls, no slip velocity and zero-gradient for pressure</span>
+        <span class="c1">#   - 2: outlet, zero-gradient for velocity and null pressure</span>
+        
+        <span class="n">id_boundaries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bound_markers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        
+        <span class="n">fixed_velocities</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">dofs_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bound</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">id_boundaries</span><span class="p">):</span>
+            
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">boundary_type</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="mi">0</span><span class="p">):</span> <span class="c1"># fixedValue velocity</span>
+                <span class="n">fixed_velocities</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">fixed_velocities</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">fixedValueVelocity</span><span class="p">(</span><span class="n">boundary_value</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdim</span><span class="p">))</span>
+                <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span> <span class="o">=</span> <span class="n">locate_dofs_topological</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> 
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bound_markers</span><span class="p">[</span><span class="n">bound</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="n">fixed_velocities</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">boundary_type</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span> <span class="c1"># no slip velocity</span>
+                <span class="n">fixed_velocities</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span> <span class="o">=</span> <span class="n">locate_dofs_topological</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> 
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bound_markers</span><span class="p">[</span><span class="n">bound</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="n">fixed_velocities</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># outlet</span>
+                <span class="n">out_pressure</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">]</span> <span class="o">=</span> <span class="n">locate_dofs_topological</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">collapse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> 
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bound_markers</span><span class="p">[</span><span class="n">bound</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">dirichletbc</span><span class="p">(</span><span class="n">out_pressure</span><span class="p">,</span> <span class="n">dofs_</span><span class="p">[</span><span class="n">bound</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="ns_steady_nl.create_snes_solution">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.create_snes_solution">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_snes_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">:</span>  <span class="c1"># type: ignore[no-any-unimported]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a petsc4py.PETSc.Vec to be passed to petsc4py.PETSc.SNES.solve.</span>
+
+<span class="sd">        The returned vector will be initialized with the initial guess provided in `self._solution`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">x</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">_solution</span><span class="p">:</span>
+            <span class="n">_x</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">_solution</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.update_solution">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.update_solution">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[no-any-unimported]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update `self._solution` with data in `x`.&quot;&quot;&quot;</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">ghostUpdate</span><span class="p">(</span><span class="n">addv</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">InsertMode</span><span class="o">.</span><span class="n">INSERT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScatterMode</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">x</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">_solution</span><span class="p">:</span>
+            <span class="n">_solution</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">_x</span></div>
+
+            
+<div class="viewcode-block" id="ns_steady_nl.obj_fun">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.obj_fun">[docs]</a>
+    <span class="k">def</span> <span class="nf">obj_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snes</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">SNES</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Compute the norm of the residual.&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">F_fun</span><span class="p">(</span><span class="n">snes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj_vec</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span>  <span class="c1"># type: ignore[no-any-return]</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.F_fun">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.F_fun">[docs]</a>
+    <span class="k">def</span> <span class="nf">F_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snes</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">SNES</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">,</span> <span class="n">F_vec</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Assemble the residual.&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_solution</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">F_vec</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">F_vec_local</span><span class="p">:</span>
+                <span class="n">F_vec_local</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_vector</span><span class="p">(</span><span class="n">F_vec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">)</span>
+            <span class="n">apply_lifting</span><span class="p">(</span><span class="n">F_vec</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_J</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">scale</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">F_vec</span><span class="o">.</span><span class="n">ghostUpdate</span><span class="p">(</span><span class="n">addv</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">InsertMode</span><span class="o">.</span><span class="n">ADD</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScatterMode</span><span class="o">.</span><span class="n">REVERSE</span><span class="p">)</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">set_bc</span><span class="p">(</span><span class="n">F_vec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.J_fun">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.J_fun">[docs]</a>
+    <span class="k">def</span> <span class="nf">J_fun</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">snes</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">SNES</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Vec</span><span class="p">,</span> <span class="n">J_mat</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Mat</span><span class="p">,</span> <span class="n">P_mat</span><span class="p">:</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Mat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Assemble the jacobian.&quot;&quot;&quot;</span>
+            <span class="n">J_mat</span><span class="o">.</span><span class="n">zeroEntries</span><span class="p">()</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_matrix</span><span class="p">(</span><span class="n">J_mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_J</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">J_mat</span><span class="o">.</span><span class="n">assemble</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.assemble">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.assemble">[docs]</a>
+    <span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxIter</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+
+        <span class="c1"># Variational forms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu</span> <span class="o">*</span> <span class="n">inner</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+                <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+                <span class="o">-</span> <span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">ufl</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+                <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dup</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_F</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_J</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
+
+        <span class="c1"># Create matrix and vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj_vec</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_J</span><span class="p">)</span>
+
+        <span class="c1"># Solver settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">SNES</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setTolerances</span><span class="p">(</span><span class="n">max_it</span><span class="o">=</span><span class="n">maxIter</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getKSP</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="s2">&quot;preonly&quot;</span><span class="p">)</span>
+        <span class="c1"># self.solver.getKSP().setType(&quot;gmres&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getKSP</span><span class="p">()</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="s2">&quot;lu&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getKSP</span><span class="p">()</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setFactorSolverType</span><span class="p">(</span><span class="s2">&quot;mumps&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setObjective</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_fun</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F_fun</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setJacobian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J_fun</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setMonitor</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">it</span><span class="p">,</span> <span class="n">residual</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">residual</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ns_steady_nl.solve">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.solve">[docs]</a>
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">up_copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_snes_solution</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">up_copy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_solution</span><span class="p">(</span><span class="n">up_copy</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

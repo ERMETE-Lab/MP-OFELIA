@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fenicsx.neutronics.thermal &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fenicsx.neutronics.thermal</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fenicsx.neutronics.thermal</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">dolfinx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ufl</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">dolfinx</span> <span class="kn">import</span> <span class="n">fem</span>
+<span class="kn">from</span> <span class="nn">dolfinx.fem</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Function</span><span class="p">,</span> <span class="n">FunctionSpace</span><span class="p">,</span> <span class="n">assemble_scalar</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> 
+                        <span class="n">locate_dofs_topological</span><span class="p">,</span> <span class="n">dirichletbc</span><span class="p">,</span> <span class="n">locate_dofs_geometrical</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ufl</span> <span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">inner</span><span class="p">,</span> <span class="n">div</span><span class="p">,</span> <span class="n">nabla_grad</span><span class="p">,</span> <span class="n">dot</span>
+<span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
+
+<div class="viewcode-block" id="steady_thermal_diffusion">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion">[docs]</a>
+<span class="k">class</span> <span class="nc">steady_thermal_diffusion</span><span class="p">():</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class implements the solution of the steady thermal diffusion equation with internal power generation made by neutrons.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    domain : dolfinx.mesh.Mesh</span>
+<span class="sd">        Mesh imported.</span>
+<span class="sd">    ct : dolfinx.cpp.mesh.MeshTags_int32</span>
+<span class="sd">        Cell tags of the regions in the domain.</span>
+<span class="sd">    ft : dolfinx.cpp.mesh.MeshTags_int32</span>
+<span class="sd">        Face tags of the boundaries.</span>
+<span class="sd">    physical_param : dict</span>
+<span class="sd">        Dictionary with the main physical parameters at reference condition.</span>
+<span class="sd">    regions_markers : dict</span>
+<span class="sd">        List of the region markers inside the domain.</span>
+<span class="sd">    void_bound_marker : int</span>
+<span class="sd">        Integer describing the index of the void boundary onto which BC is imposed (Dirichlet or Robin).</span>
+<span class="sd">    h : float, optional (Default = None)</span>
+<span class="sd">        If not `None`, it, denoted as :math:`h`, represents the heat transfer coefficients in Newton&#39;s cooling law.</span>
+<span class="sd">    TD : float, optional (Default = None)</span>
+<span class="sd">        If not `None`, it, denoted as :math:`T_D`, represents either the bulk temperature in Newton&#39;s cooling law or the Dirichlet condition to impose.</span>
+<span class="sd">    coupling : str, optional (Default = None)</span>
+<span class="sd">        If not `None`, it indicates the type of coupling with the temperature: *log* and *sqrt* are available.</span>
+<span class="sd">            </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">ct</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span> 
+                       <span class="n">physical_param</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">regions_markers</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">void_bound_marker</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+                       <span class="n">h</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TD</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">300.</span><span class="p">,</span> <span class="n">coupling</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">ft</span> <span class="o">=</span> <span class="n">ft</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span> <span class="o">=</span> <span class="n">void_bound_marker</span>
+        
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;quadrature_degree&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;dx&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="c1"># Defining the number of energy groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Energy Groups&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Temperature Functional spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finiteElement</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">finiteElement</span><span class="p">)</span>
+        
+        <span class="c1"># Material Properties Functional spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qn</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">coupling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Told</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Tref</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Tref&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">=</span> <span class="n">coupling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span> <span class="o">=</span> <span class="n">physical_param</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regions</span> <span class="o">=</span> <span class="n">regions_markers</span> 
+
+        <span class="c1"># Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span> <span class="c1"># thermal conductivity</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;th_cond&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ef</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Ef&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span>
+    
+        <span class="c1"># Definig trial and test functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TrialFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        
+        <span class="c1"># Setting up boundary conditions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TD</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">TD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="c1"># HTC - if None, Dirichlet is imposed</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dirichletbc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="p">,</span> <span class="n">locate_dofs_topological</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)))]</span>
+        
+        <span class="c1"># Create solution function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        
+        <span class="c1"># Creating flux function and power form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ef</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span>
+        
+<div class="viewcode-block" id="steady_thermal_diffusion.assembleForm">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.assembleForm">[docs]</a>
+    <span class="k">def</span> <span class="nf">assembleForm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function assembles the variational forms and the correspondent linear algebra structures.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        direct : bool, optional (Default=True)</span>
+<span class="sd">            If `True`, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_side</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_side</span>  <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+
+        <span class="c1"># Boundary condition (convection)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left_side</span>  <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right_side</span> <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span>  <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_side</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear</span>  <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_side</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">zeroEntries</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">assemble</span><span class="p">()</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setOperators</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">direct</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">PREONLY</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">PC</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">LU</span><span class="p">)</span>  
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">GMRES</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">PC</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">ILU</span><span class="p">)</span>   </div>
+
+            
+<div class="viewcode-block" id="steady_thermal_diffusion.update_xs">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.update_xs">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function updates the cross sections according to the coupling scheme chosen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># no thermal feedback</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+                    
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="c1"># log law</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Told</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tref</span><span class="p">)</span>
+                     
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span> <span class="c1"># sqrt law</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Told</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tref</span><span class="p">)))</span> <span class="p">)</span></div>
+
+                    
+<div class="viewcode-block" id="steady_thermal_diffusion.solve">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.solve">[docs]</a>
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">dolfinx</span><span class="o">.</span><span class="n">fem</span><span class="o">.</span><span class="n">Function</span><span class="p">],</span> <span class="n">k_eff</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">fem</span><span class="o">.</span><span class="n">Function</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function solves the steady equation.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phi : list[dolfinx.fem.Function]</span>
+<span class="sd">            List of `dolfinx.fem.Function` for the internal power generation, :math:`q&#39;&#39;&#39; = E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g`.</span>
+<span class="sd">        k_eff : float</span>
+<span class="sd">            Effective multiplication factor.</span>
+<span class="sd">        temperature : dolfinx.fem.Function, optional (Default = None)</span>
+<span class="sd">            Temperature field as a `dolfinx.fem.Function` used to calculate the cross sections.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        solution : dolfinx.fem.Function</span>
+<span class="sd">            Output of the linear system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Update k_eff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">k_eff</span><span class="p">)</span>
+        
+        <span class="c1"># Updating fluxes</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">fem</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span> <span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">interpolation_points</span><span class="p">()</span> <span class="p">))</span>
+
+        <span class="c1"># Update XS</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Updating temperature</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Told</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">temperature</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Told</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">temperature</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Told</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">fem</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span> <span class="n">temperature</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">interpolation_points</span><span class="p">()</span> <span class="p">))</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_xs</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">loc_b</span><span class="p">:</span>
+            <span class="n">loc_b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Apply Dirichlet boundary condition to the vector</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">apply_lifting</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">ghostUpdate</span><span class="p">(</span><span class="n">addv</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">InsertMode</span><span class="o">.</span><span class="n">ADD_VALUES</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScatterMode</span><span class="o">.</span><span class="n">REVERSE</span><span class="p">)</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">set_bc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">)</span>
+
+        <span class="c1"># Solve linear problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">scatter_forward</span><span class="p">()</span>  
+                
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span></div>
+</div>
+
+
+<div class="viewcode-block" id="transient_thermal_diffusion">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion">[docs]</a>
+<span class="k">class</span> <span class="nc">transient_thermal_diffusion</span><span class="p">():</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class implements the solution of the transient thermal diffusion equation with internal power generation made by neutrons.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    domain : dolfinx.mesh.Mesh</span>
+<span class="sd">        Mesh imported.</span>
+<span class="sd">    ct : dolfinx.cpp.mesh.MeshTags_int32</span>
+<span class="sd">        Cell tags of the regions in the domain.</span>
+<span class="sd">    ft : dolfinx.cpp.mesh.MeshTags_int32</span>
+<span class="sd">        Face tags of the boundaries.</span>
+<span class="sd">    physical_param : dict</span>
+<span class="sd">        Dictionary with the main physical parameters at reference condition.</span>
+<span class="sd">    regions_markers : dict</span>
+<span class="sd">        List of the region markers inside the domain.</span>
+<span class="sd">    void_bound_marker : int</span>
+<span class="sd">        Integer describing the index of the void boundary onto which BC is imposed (Dirichlet or Robin).</span>
+<span class="sd">    h : float, optional (Default = None)</span>
+<span class="sd">        If not `None`, it, denoted as :math:`h`, represents the heat transfer coefficients in Newton&#39;s cooling law.</span>
+<span class="sd">    TD : float, optional (Default = None)</span>
+<span class="sd">        If not `None`, it, denoted as :math:`T_D`, represents either the bulk temperature in Newton&#39;s cooling law or the Dirichlet condition to impose.</span>
+<span class="sd">    coupling : str, optional (Default = None)</span>
+<span class="sd">        If not `None`, it indicates the type of coupling with the temperature: *log* and *sqrt* are available.</span>
+<span class="sd">            </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">ct</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">MeshTags_int32</span><span class="p">,</span> 
+                       <span class="n">physical_param</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">regions_markers</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">void_bound_marker</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                       <span class="n">h</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TD</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">300.</span><span class="p">,</span> <span class="n">coupling</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ft</span> <span class="o">=</span> <span class="n">ft</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">dim</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span> <span class="o">=</span> <span class="n">void_bound_marker</span>
+        
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;quadrature_degree&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;dx&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="c1"># Defining the number of energy groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Energy Groups&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Temperature Functional spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finiteElement</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">finiteElement</span><span class="p">)</span>
+        
+        <span class="c1"># Material Properties Functional spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Qn</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">coupling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Told</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Tref</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Tref&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">=</span> <span class="n">coupling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span> <span class="o">=</span> <span class="n">physical_param</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regions</span> <span class="o">=</span> <span class="n">regions_markers</span> 
+
+        <span class="c1"># Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span> <span class="c1"># thermal conductivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span> <span class="c1"># thermal conductivity</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;th_cond&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;rho_cp&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ef</span> <span class="o">=</span> <span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;Ef&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">physical_param</span><span class="p">[</span><span class="s1">&#39;k_eff&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Definig trial and test functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TrialFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        
+        <span class="c1"># Setting up boundary conditions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TD</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">TD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="c1"># HTC - if None, Dirichlet is imposed</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dirichletbc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="p">,</span> <span class="n">locate_dofs_topological</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ft</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)))]</span>
+        
+        <span class="c1"># Create old function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_old</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        
+        <span class="c1"># Creating flux function and power form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ef</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_eff</span>
+
+<div class="viewcode-block" id="transient_thermal_diffusion.assembleForm">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.assembleForm">[docs]</a>
+    <span class="k">def</span> <span class="nf">assembleForm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T_ss</span><span class="p">:</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">fem</span><span class="o">.</span><span class="n">Function</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">direct</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function assembles the variational forms and the correspondent linear algebra structures.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        T_ss : dolfinx.fem.Function</span>
+<span class="sd">            Steady solution, i.e. the initial condition.</span>
+<span class="sd">        dt : float</span>
+<span class="sd">            Time step size.</span>
+<span class="sd">        direct : bool, optional (Default=True)</span>
+<span class="sd">            If `True`, a direct linear solver is used (Gauss Elimination), otherwise an iterative one is adopted (preconditioned GMRES with ILU).</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">set</span><span class="p">(</span> <span class="n">dt</span> <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_side</span>   <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_side</span>  <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span> <span class="o">*</span> <span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_side</span>  <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_old</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_side</span> <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q3</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        
+        <span class="c1"># Boundary condition (convection)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left_side</span>  <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right_side</span> <span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_cp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">TD</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">void_bound_marker</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span>  <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_side</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear</span>  <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_side</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">zeroEntries</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">assemble</span><span class="p">()</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">create_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setOperators</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">direct</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">PREONLY</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">PC</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">LU</span><span class="p">)</span>  
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">CG</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">getPC</span><span class="p">()</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">PC</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">SOR</span><span class="p">)</span>   
+
+        <span class="c1"># Initialise the old function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_old</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span> <span class="n">fem</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="n">T_ss</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">interpolation_points</span><span class="p">()))</span></div>
+
+ 
+<div class="viewcode-block" id="transient_thermal_diffusion.update_xs">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.update_xs">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_xs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function updates the cross sections according to the coupling scheme chosen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># no thermal feedback</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+                    
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="c1"># log law</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_old</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tref</span><span class="p">)</span>
+                     
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coupling</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span> <span class="c1"># sqrt law</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">regionI</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">):</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">regionI</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">xs_fg</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">]</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">phys_param</span><span class="p">[</span><span class="s1">&#39;xs_f&#39;</span><span class="p">][</span><span class="n">g</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>    <span class="o">*</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_old</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">cells</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tref</span><span class="p">)))</span> <span class="p">)</span></div>
+
+                    
+<div class="viewcode-block" id="transient_thermal_diffusion.advance">
+<a class="viewcode-back" href="../../../api/fenicsx/fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.advance">[docs]</a>
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function advances in time with a single step.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phi : list[dolfinx.fem.Function]</span>
+<span class="sd">            List of `dolfinx.fem.Function` for the internal power generation, :math:`q&#39;&#39;&#39; = E_f\cdot \sum_{g=1}^G \Sigma_{f,g}\phi_g```</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        solution : dolfinx.fem.Function</span>
+<span class="sd">            Solution at the new time step..</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Updating fluxes</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">array</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi_g</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">fem</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span> <span class="n">phi</span><span class="p">[</span><span class="n">g</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">interpolation_points</span><span class="p">()</span> <span class="p">))</span>
+
+        <span class="c1"># Update XS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_xs</span><span class="p">()</span>
+        
+        <span class="c1"># Assemble RHS with lifting for the Dirichlet BC</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">localForm</span><span class="p">()</span> <span class="k">as</span> <span class="n">loc_b</span><span class="p">:</span>
+            <span class="n">loc_b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">assemble_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Apply Dirichlet boundary condition to the vector</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">apply_lifting</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bilinear</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">ghostUpdate</span><span class="p">(</span><span class="n">addv</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">InsertMode</span><span class="o">.</span><span class="n">ADD_VALUES</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScatterMode</span><span class="o">.</span><span class="n">REVERSE</span><span class="p">)</span>
+            <span class="n">fem</span><span class="o">.</span><span class="n">petsc</span><span class="o">.</span><span class="n">set_bc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">)</span>
+
+        <span class="c1"># Solve linear problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">scatter_forward</span><span class="p">()</span>  
+                
+        <span class="c1"># Update old </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_old</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span> <span class="n">fem</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Qn</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">interpolation_points</span><span class="p">()))</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

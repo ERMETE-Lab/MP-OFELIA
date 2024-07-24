@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fenicsx package &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="fenicsx.fluid_dynamics package" href="fenicsx.fluid_dynamics.html" />
+    <link rel="prev" title="Solvers" href="../../solvers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API-FEniCSx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html">fenicsx.fluid_dynamics package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html">fenicsx.neutronics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fenicsx.backends">fenicsx.backends module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fenicsx.backends.LoopProgress"><code class="docutils literal notranslate"><span class="pre">LoopProgress</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fenicsx.backends.norms"><code class="docutils literal notranslate"><span class="pre">norms</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fenicsx.plotting">fenicsx.plotting module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fenicsx.plotting.PlotScalar"><code class="docutils literal notranslate"><span class="pre">PlotScalar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fenicsx.plotting.extract_cells"><code class="docutils literal notranslate"><span class="pre">extract_cells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fenicsx.plotting.get_scalar_grid"><code class="docutils literal notranslate"><span class="pre">get_scalar_grid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fenicsx">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../solvers.html">Solvers</a></li>
+      <li class="breadcrumb-item active">fenicsx package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/fenicsx/fenicsx.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fenicsx-package">
+<h1>fenicsx package<a class="headerlink" href="#fenicsx-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fenicsx.fluid_dynamics.html">fenicsx.fluid_dynamics package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.fluid_dynamics.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.fluid_dynamics.html#module-fenicsx.fluid_dynamics.steady_ns">fenicsx.fluid_dynamics.steady_ns module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.fixedValueVelocity"><code class="docutils literal notranslate"><span class="pre">fixedValueVelocity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.lid"><code class="docutils literal notranslate"><span class="pre">lid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.lid_velocity_expression"><code class="docutils literal notranslate"><span class="pre">lid_velocity_expression()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.noslip_boundary"><code class="docutils literal notranslate"><span class="pre">noslip_boundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.F_fun"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.F_fun()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.J_fun"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.J_fun()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.assemble"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.assemble()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.create_snes_solution"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.create_snes_solution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.obj_fun"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.obj_fun()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.parameters"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_bc"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.set_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_cavity_bc"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.set_cavity_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.solve"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.update_solution"><code class="docutils literal notranslate"><span class="pre">ns_steady_nl.update_solution()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.fluid_dynamics.html#module-fenicsx.fluid_dynamics.transient_ns">fenicsx.fluid_dynamics.transient_ns module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.drag_lift"><code class="docutils literal notranslate"><span class="pre">drag_lift</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.drag_lift.compute"><code class="docutils literal notranslate"><span class="pre">drag_lift.compute()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.pressure_projection"><code class="docutils literal notranslate"><span class="pre">pressure_projection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.pressure_projection.advance"><code class="docutils literal notranslate"><span class="pre">pressure_projection.advance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.pressure_projection.assembleForm"><code class="docutils literal notranslate"><span class="pre">pressure_projection.assembleForm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.tentative_velocity"><code class="docutils literal notranslate"><span class="pre">tentative_velocity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.tentative_velocity.advance"><code class="docutils literal notranslate"><span class="pre">tentative_velocity.advance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.tentative_velocity.assembleForm"><code class="docutils literal notranslate"><span class="pre">tentative_velocity.assembleForm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.update_velocity"><code class="docutils literal notranslate"><span class="pre">update_velocity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.update_velocity.advance"><code class="docutils literal notranslate"><span class="pre">update_velocity.advance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.fluid_dynamics.html#fenicsx.fluid_dynamics.transient_ns.update_velocity.assembleForm"><code class="docutils literal notranslate"><span class="pre">update_velocity.assembleForm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.fluid_dynamics.html#module-fenicsx.fluid_dynamics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fenicsx.neutronics.html">fenicsx.neutronics package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.neutronics.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.neutronics.html#module-fenicsx.neutronics.neutr_diff">fenicsx.neutronics.neutr_diff module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.steady_neutron_diff"><code class="docutils literal notranslate"><span class="pre">steady_neutron_diff</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.steady_neutron_diff.assembleForm"><code class="docutils literal notranslate"><span class="pre">steady_neutron_diff.assembleForm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.steady_neutron_diff.solve"><code class="docutils literal notranslate"><span class="pre">steady_neutron_diff.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.steady_neutron_diff.update_xs"><code class="docutils literal notranslate"><span class="pre">steady_neutron_diff.update_xs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.transient_neutron_diff"><code class="docutils literal notranslate"><span class="pre">transient_neutron_diff</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.transient_neutron_diff.advance"><code class="docutils literal notranslate"><span class="pre">transient_neutron_diff.advance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.transient_neutron_diff.assembleForm"><code class="docutils literal notranslate"><span class="pre">transient_neutron_diff.assembleForm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.neutr_diff.transient_neutron_diff.update_xs"><code class="docutils literal notranslate"><span class="pre">transient_neutron_diff.update_xs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.neutronics.html#module-fenicsx.neutronics.thermal">fenicsx.neutronics.thermal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion"><code class="docutils literal notranslate"><span class="pre">steady_thermal_diffusion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.assembleForm"><code class="docutils literal notranslate"><span class="pre">steady_thermal_diffusion.assembleForm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.solve"><code class="docutils literal notranslate"><span class="pre">steady_thermal_diffusion.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.steady_thermal_diffusion.update_xs"><code class="docutils literal notranslate"><span class="pre">steady_thermal_diffusion.update_xs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion"><code class="docutils literal notranslate"><span class="pre">transient_thermal_diffusion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.advance"><code class="docutils literal notranslate"><span class="pre">transient_thermal_diffusion.advance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.assembleForm"><code class="docutils literal notranslate"><span class="pre">transient_thermal_diffusion.assembleForm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html#fenicsx.neutronics.thermal.transient_thermal_diffusion.update_xs"><code class="docutils literal notranslate"><span class="pre">transient_thermal_diffusion.update_xs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fenicsx.neutronics.html#module-fenicsx.neutronics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-fenicsx.backends">
+<span id="fenicsx-backends-module"></span><h2>fenicsx.backends module<a class="headerlink" href="#module-fenicsx.backends" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.backends.LoopProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.backends.</span></span><span class="sig-name descname"><span class="pre">LoopProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#LoopProgress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.LoopProgress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to make progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Message to be displayed</p></li>
+<li><p><strong>final</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>Default = 100</em><em>)</em>) – Maximum value for the iterations</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.LoopProgress.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#LoopProgress.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.LoopProgress.update" title="Link to this definition"></a></dt>
+<dd><p>Update message to display and clears the previous one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step</strong> (<em>float</em>) – Interger or float value to add at the counter.</p></li>
+<li><p><strong>percentage</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>Default = True</em><em>)</em>) – Indicates if the bar should be displayed in %.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.backends.norms">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.backends.</span></span><span class="sig-name descname"><span class="pre">norms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.FunctionSpace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_H1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to compute norms and inner products. <span class="math notranslate nohighlight">\(L^2\)</span> and <span class="math notranslate nohighlight">\(H^1\)</span> (semi and full are implemented for both scalar and vector fields), whereas the average and the integral are available for scalar only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>V</strong> (<em>FunctionSpace</em>) – Functional Space onto which the Function are defined.</p></li>
+<li><p><strong>is_H1</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>Default = False</em><em>)</em>) – If the function belongs to <span class="math notranslate nohighlight">\(H^1\)</span>, the forms for the inner products and norms are computed.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.H1innerProd">
+<span class="sig-name descname"><span class="pre">H1innerProd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.H1innerProd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.H1innerProd" title="Link to this definition"></a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(H^1\)</span> semi or full inner product of the functions <cite>u</cite> and <cite>v</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[\langle u, v \,\rangle_{H^1} = \int_\Omega \nabla u \cdot \nabla v\,d\Omega\]</div>
+<div class="math notranslate nohighlight">
+\[(u,v)_{H^1} = \int_\Omega u\cdot v \,d\Omega + \int_\Omega \nabla u\cdot \nabla v \,d\Omega\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p></li>
+<li><p><strong>v</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p></li>
+<li><p><strong>semi</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>Default = True</em><em>)</em>) – Indicates if the semi norm must be computed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – <span class="math notranslate nohighlight">\(H^1\)</span> inner product of the functions</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.H1norm">
+<span class="sig-name descname"><span class="pre">H1norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.H1norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.H1norm" title="Link to this definition"></a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(H^1\)</span> semi or full norm of the function <cite>u</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[| u |_{H^1} = \sqrt{\int_\Omega \nabla u \cdot \nabla u\,d\Omega}\]</div>
+<div class="math notranslate nohighlight">
+\[\| u \|_{H^1} = \sqrt{\int_\Omega \nabla u \cdot \nabla u\,d\Omega + \int_\Omega u \cdot  u\,d\Omega}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p></li>
+<li><p><strong>semi</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>Default = True</em><em>)</em>) – Indicates if the semi norm must be computed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – <span class="math notranslate nohighlight">\(H^1\)</span> norm of the function</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.L2innerProd">
+<span class="sig-name descname"><span class="pre">L2innerProd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.L2innerProd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.L2innerProd" title="Link to this definition"></a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(L^2\)</span> inner product of the functions <cite>u</cite> and <cite>v</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[(u,v)_{L^2}=\int_\Omega u\cdot v \,d\Omega\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p></li>
+<li><p><strong>v</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – <span class="math notranslate nohighlight">\(L^2\)</span> inner product between the functions</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.L2norm">
+<span class="sig-name descname"><span class="pre">L2norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.L2norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.L2norm" title="Link to this definition"></a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(L^2\)</span> norm of the function <cite>u</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[\| u\|_{L^2} = \sqrt{\int_\Omega u \cdot u\,d\Omega}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – <span class="math notranslate nohighlight">\(L^2\)</span> norm of the function</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.Linftynorm">
+<span class="sig-name descname"><span class="pre">Linftynorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.Linftynorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.Linftynorm" title="Link to this definition"></a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(L^\infty\)</span> norm of a given function <cite>u</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[\| u \|_{L^\infty}=\max\limits_\Omega |u|\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space <cite>V</cite></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – <span class="math notranslate nohighlight">\(L^\infty\)</span> norm of the function</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.average">
+<span class="sig-name descname"><span class="pre">average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.average" title="Link to this definition"></a></dt>
+<dd><p>Computes the integral average of a given <strong>scalar</strong> function <cite>u</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[\langle u \rangle = \frac{1}{|\Omega|}\int_\Omega u \,d\Omega\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space V (it must be a scalar!)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ave_value</strong> – Average over the domain</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.backends.norms.integral">
+<span class="sig-name descname"><span class="pre">integral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/backends.html#norms.integral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.backends.norms.integral" title="Link to this definition"></a></dt>
+<dd><p>Computes the integral of a given scalar function <cite>u</cite> over the domain</p>
+<div class="math notranslate nohighlight">
+\[\int_\Omega u \,d\Omega\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>u</strong> (<em>Function</em>) – Function belonging to the same functional space V (it must be a scalar!)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>val</strong> – Integral over the domain</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fenicsx.plotting">
+<span id="fenicsx-plotting-module"></span><h2>fenicsx.plotting module<a class="headerlink" href="#module-fenicsx.plotting" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.plotting.PlotScalar">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.plotting.</span></span><span class="sig-name descname"><span class="pre">PlotScalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">fun:</span> <span class="pre">dolfinx.fem.Function,</span> <span class="pre">filename:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">format:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'png',</span> <span class="pre">varname:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">clim=None,</span> <span class="pre">colormap=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;,</span> <span class="pre">resolution=[1080,</span> <span class="pre">720],</span> <span class="pre">show=False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/plotting.html#PlotScalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.plotting.PlotScalar" title="Link to this definition"></a></dt>
+<dd><p>Python function to plot a scalar field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> (<em>Function</em>) – Field to plot.</p></li>
+<li><p><strong>varname</strong> (<em>str</em>) – Name of the variable.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the file to save.</p></li>
+<li><p><strong>clim</strong> (<em>optional</em><em> (</em><em>Default = None</em><em>)</em>) – Colorbar limit, if <cite>None</cite> the mininum and maximum of <cite>fun</cite> are computed</p></li>
+<li><p><strong>colormap</strong> (<em>optional</em><em> (</em><em>Default = jet</em><em>)</em>) – Colormap for the plot</p></li>
+<li><p><strong>resolution</strong> (<em>list</em><em>, </em><em>optional</em><em> (</em><em>Default =</em><em> [</em><em>1080</em><em>, </em><em>720</em><em>]</em><em>)</em>) – Resolution of the image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.plotting.extract_cells">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.plotting.</span></span><span class="sig-name descname"><span class="pre">extract_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/plotting.html#extract_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.plotting.extract_cells" title="Link to this definition"></a></dt>
+<dd><p>This function can be used to extract data along a line defined by the variables <cite>points</cite>, crossing the domain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>domain</strong> (<em>dolfinx.mesh.Mesh</em>) – Domain to extract data from.</p></li>
+<li><p><strong>points</strong> (<em>np.ndarray</em>) – Points listing the line from which data are extracted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>xPlot</strong> (<em>np.ndarray</em>) – Coordinate denoting the cell from which data are extracted.</p></li>
+<li><p><strong>cells</strong> (<em>list</em>) – List of cells of the mesh.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.plotting.get_scalar_grid">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.plotting.</span></span><span class="sig-name descname"><span class="pre">get_scalar_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/plotting.html#get_scalar_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.plotting.get_scalar_grid" title="Link to this definition"></a></dt>
+<dd><p>This function extracts the dofs of a scalar function for the plot using pyvista.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> (<em>Function</em>) – Function from which the dofs are extracted.</p></li>
+<li><p><strong>varname</strong> (<em>str</em>) – Name of the variable.</p></li>
+<li><p><strong>real</strong> (<em>boolean</em><em>, </em><em>optional</em><em> (</em><em>Default = True</em><em>)</em>) – Real dofs are considered, if <cite>False</cite> imaginary dofs are used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>u_grid</strong> – Unstructured grid of values for the selected function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyvista.UnstructuredGrid</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fenicsx">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fenicsx" title="Link to this heading"></a></h2>
+<p>models/fenicsx.</p>
+<p>OFELIA: FEniCSx models for MultiPhysics.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../solvers.html" class="btn btn-neutral float-left" title="Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fenicsx.fluid_dynamics.html" class="btn btn-neutral float-right" title="fenicsx.fluid_dynamics package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

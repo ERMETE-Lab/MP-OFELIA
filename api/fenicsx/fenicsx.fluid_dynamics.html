@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fenicsx.fluid_dynamics package &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="fenicsx.neutronics package" href="fenicsx.neutronics.html" />
+    <link rel="prev" title="fenicsx package" href="fenicsx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../solvers.html">Solvers</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="fenicsx.html">API-FEniCSx</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="fenicsx.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">fenicsx.fluid_dynamics package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fenicsx.neutronics.html">fenicsx.neutronics package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx.backends">fenicsx.backends module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx.plotting">fenicsx.plotting module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenicsx.html#module-fenicsx">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../solvers.html">Solvers</a></li>
+          <li class="breadcrumb-item"><a href="fenicsx.html">fenicsx package</a></li>
+      <li class="breadcrumb-item active">fenicsx.fluid_dynamics package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/fenicsx/fenicsx.fluid_dynamics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fenicsx-fluid-dynamics-package">
+<h1>fenicsx.fluid_dynamics package<a class="headerlink" href="#fenicsx-fluid-dynamics-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-fenicsx.fluid_dynamics.steady_ns">
+<span id="fenicsx-fluid-dynamics-steady-ns-module"></span><h2>fenicsx.fluid_dynamics.steady_ns module<a class="headerlink" href="#module-fenicsx.fluid_dynamics.steady_ns" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.fixedValueVelocity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.steady_ns.</span></span><span class="sig-name descname"><span class="pre">fixedValueVelocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_fixed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#fixedValueVelocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.fixedValueVelocity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.lid">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.steady_ns.</span></span><span class="sig-name descname"><span class="pre">lid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#lid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.lid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.lid_velocity_expression">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.steady_ns.</span></span><span class="sig-name descname"><span class="pre">lid_velocity_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#lid_velocity_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.lid_velocity_expression" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.noslip_boundary">
+<span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.steady_ns.</span></span><span class="sig-name descname"><span class="pre">noslip_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#noslip_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.noslip_boundary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.steady_ns.</span></span><span class="sig-name descname"><span class="pre">ns_steady_nl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree_u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.F_fun">
+<span class="sig-name descname"><span class="pre">F_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.SNES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.F_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.F_fun" title="Link to this definition"></a></dt>
+<dd><p>Assemble the residual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.J_fun">
+<span class="sig-name descname"><span class="pre">J_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.SNES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J_mat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P_mat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Mat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.J_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.J_fun" title="Link to this definition"></a></dt>
+<dd><p>Assemble the jacobian.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxIter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.assemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.assemble" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.create_snes_solution">
+<span class="sig-name descname"><span class="pre">create_snes_solution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">petsc4py.PETSc.Vec</span></span></span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.create_snes_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.create_snes_solution" title="Link to this definition"></a></dt>
+<dd><p>Create a petsc4py.PETSc.Vec to be passed to petsc4py.PETSc.SNES.solve.</p>
+<p>The returned vector will be initialized with the initial guess provided in <cite>self._solution</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.obj_fun">
+<span class="sig-name descname"><span class="pre">obj_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.SNES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.obj_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.obj_fun" title="Link to this definition"></a></dt>
+<dd><p>Compute the norm of the residual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_bc">
+<span class="sig-name descname"><span class="pre">set_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boundary_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.set_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_cavity_bc">
+<span class="sig-name descname"><span class="pre">set_cavity_bc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.set_cavity_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.set_cavity_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.solve" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.update_solution">
+<span class="sig-name descname"><span class="pre">update_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">petsc4py.PETSc.Vec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/steady_ns.html#ns_steady_nl.update_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.steady_ns.ns_steady_nl.update_solution" title="Link to this definition"></a></dt>
+<dd><p>Update <cite>self._solution</cite> with data in <cite>x</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fenicsx.fluid_dynamics.transient_ns">
+<span id="fenicsx-fluid-dynamics-transient-ns-module"></span><h2>fenicsx.fluid_dynamics.transient_ns module<a class="headerlink" href="#module-fenicsx.fluid_dynamics.transient_ns" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.drag_lift">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.transient_ns.</span></span><span class="sig-name descname"><span class="pre">drag_lift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obstacle_mark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[0.15,</span> <span class="pre">0.2,</span> <span class="pre">0],</span> <span class="pre">[0.25,</span> <span class="pre">0.2,</span> <span class="pre">0]]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#drag_lift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.drag_lift" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.drag_lift.compute">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#drag_lift.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.drag_lift.compute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.pressure_projection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.transient_ns.</span></span><span class="sig-name descname"><span class="pre">pressure_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_adv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#pressure_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.pressure_projection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.pressure_projection.advance">
+<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_tilde</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#pressure_projection.advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.pressure_projection.advance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.pressure_projection.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#pressure_projection.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.pressure_projection.assembleForm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.tentative_velocity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.transient_ns.</span></span><span class="sig-name descname"><span class="pre">tentative_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inlet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_adv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#tentative_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.tentative_velocity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.tentative_velocity.advance">
+<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#tentative_velocity.advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.tentative_velocity.advance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.tentative_velocity.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#tentative_velocity.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.tentative_velocity.assembleForm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.update_velocity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fenicsx.fluid_dynamics.transient_ns.</span></span><span class="sig-name descname"><span class="pre">update_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.mesh.Mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.cpp.mesh.MeshTags_int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_adv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#update_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.update_velocity" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.update_velocity.advance">
+<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_tilde</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dolfinx.fem.Function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#update_velocity.advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.update_velocity.advance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fenicsx.fluid_dynamics.transient_ns.update_velocity.assembleForm">
+<span class="sig-name descname"><span class="pre">assembleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/fenicsx/fluid_dynamics/transient_ns.html#update_velocity.assembleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fenicsx.fluid_dynamics.transient_ns.update_velocity.assembleForm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fenicsx.fluid_dynamics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fenicsx.fluid_dynamics" title="Link to this heading"></a></h2>
+<p>models/fenicsx/fluid_dynamics.</p>
+<p>OFELIA: FEniCSx models for Fluid Dynamics.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fenicsx.html" class="btn btn-neutral float-left" title="fenicsx package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fenicsx.neutronics.html" class="btn btn-neutral float-right" title="fenicsx.neutronics package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

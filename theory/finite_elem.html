@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elements of Functional Analysis &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Solvers" href="../solvers.html" />
+    <link rel="prev" title="Steady Stokes" href="fluid_dyn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theory.html">Theory</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="neutronics.html">     Neutronics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluid_dyn.html">     Fluid Dynamics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">     Finite Elements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#l-2-and-sobolev-spaces"><span class="math notranslate nohighlight">\(L^2\)</span> and Sobolev spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#useful-formulas">Useful formulas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#weak-formulations">Weak Formulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#galerkin-approximation">Galerkin approximation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#finite-element-algebraic-formulation">Finite element algebraic formulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../theory.html">Theory</a></li>
+      <li class="breadcrumb-item active">Elements of Functional Analysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/finite_elem.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="elements-of-functional-analysis">
+<h1>Elements of Functional Analysis<a class="headerlink" href="#elements-of-functional-analysis" title="Link to this heading"></a></h1>
+<p>This section collects basic knowledge of weak formulations and functional spaces to understand the math behind the finite element method <span id="id1">[<a class="reference internal" href="../bibliography.html#id4" title="A. Ferrero, F. Gazzola, and M. Zanotti. Elements of Advanced Mathematical Analysis for Physics and Engineering. Società Editrice Esculapio, iii edition, 2015. ISBN 9788874888955.">FGZ15</a>, <a class="reference internal" href="../bibliography.html#id3" title="Alfio Quarteroni. Numerical Models for Differential Problems. Springer, Cham, iii edition, 2016.">Qua16</a>, <a class="reference internal" href="../bibliography.html#id2" title="Sandro Salsa. Equazioni a derivate parziali. Springer Milan, iii edition, 2016. ISBN 978-88-470-5785-2.">Sal16</a>]</span>.</p>
+<p>Let <span class="math notranslate nohighlight">\(\Omega\subset\mathbb{R}^{d}\)</span> with <span class="math notranslate nohighlight">\(d=2,3\)</span> and <span class="math notranslate nohighlight">\(\partial \Omega\)</span> its boundary.</p>
+<section id="l-2-and-sobolev-spaces">
+<h2><span class="math notranslate nohighlight">\(L^2\)</span> and Sobolev spaces<a class="headerlink" href="#l-2-and-sobolev-spaces" title="Link to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(L^2(\Omega)\)</span> be an Hilbert space of square integrable functions, i.e.</p>
+<div class="math notranslate nohighlight">
+\[
+u\in L^2(\Omega)\Longleftrightarrow \int_\Omega |u|^2\,d\Omega &lt;\infty
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(L^2\)</span> is an Hilbert space, an inner product and an induced norm can be endowed</p>
+<div class="math notranslate nohighlight">
+\[
+(u, \, v) = \int_\Omega u\cdot v\,d\Omega \qquad \qquad
+\|u\|_{L^2}^2 = \int_\Omega |u|^2\,d\Omega
+\]</div>
+<p>The same space can be easily extended to vector quantities and complex functions (the conjugate is introduced).</p>
+<p>Let us introduced the notion of multi-index derivative  <span class="math notranslate nohighlight">\(D^{{\alpha}}\)</span>: given <span class="math notranslate nohighlight">\({\alpha}\in\mathbb{N}^d\)</span> of order <span class="math notranslate nohighlight">\(p=\sum_{i=1}^d \alpha_i\)</span>, the multi-index derivative of a function is defined as</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+    D^{{\alpha}}u = \frac{\partial^pu}{\partial x_1^{\alpha_1} \dots \partial x_d^{\alpha_d}},
+\end{equation*}\]</div>
+<p>in which <span class="math notranslate nohighlight">\(d\)</span> is usually 2 or 3 <span id="id2">[<a class="reference internal" href="../bibliography.html#id4" title="A. Ferrero, F. Gazzola, and M. Zanotti. Elements of Advanced Mathematical Analysis for Physics and Engineering. Società Editrice Esculapio, iii edition, 2015. ISBN 9788874888955.">FGZ15</a>]</span>.</p>
+<p>Let <span class="math notranslate nohighlight">\(\mathcal{H}^p(\Omega)\)</span> be the Sobolev space of order <span class="math notranslate nohighlight">\(p\)</span>, i.e.</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{H}^p(\Omega) = \left\{u\in L^2(\Omega)\,:\,\int_\Omega \left|D^{{\alpha}}u\right|^2\,d\Omega &lt;\infty \right\}
+\]</div>
+<p>All these derivatives are meant to be in the weak/distribution sense <span id="id3">[<a class="reference internal" href="../bibliography.html#id4" title="A. Ferrero, F. Gazzola, and M. Zanotti. Elements of Advanced Mathematical Analysis for Physics and Engineering. Società Editrice Esculapio, iii edition, 2015. ISBN 9788874888955.">FGZ15</a>]</span>.</p>
+</section>
+<section id="useful-formulas">
+<h2>Useful formulas<a class="headerlink" href="#useful-formulas" title="Link to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(\mathbf{u}\in[\mathcal{H}^1(\Omega)]^d\)</span> a vector function, the Gauss (divergence) theorem states:</p>
+<div class="math notranslate nohighlight">
+\[
+\int_\Omega \nabla \cdot \mathbf{u}\,d\Omega = \int_{\partial\Omega}\mathbf{u}\cdot \mathbf{n}\,d\sigma
+\]</div>
+<p>From this theorem, the following formulas can be derived</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\int_\Omega (\nabla \cdot \mathbf{u}) \,p\,d\Omega = 
+- \int_\Omega \mathbf{u} \cdot \nabla p\,d\Omega + \int_{\partial\Omega}(\mathbf{u}\cdot \mathbf{n})\,p\,d\sigma
+\end{equation*}\]</div>
+<p>given <span class="math notranslate nohighlight">\(p\in\mathcal{H}^1(\Omega)\)</span>.</p>
+<div class="proof admonition" id="proof">
+<p>Proof. Recalling that <span class="math notranslate nohighlight">\( \nabla\cdot (p\,\mathbf{u})=(\nabla \cdot \mathbf{u}) \,p + \mathbf{u} \cdot \nabla p\)</span> we can rewrite the formula as</p>
+<div class="math notranslate nohighlight">
+\[
+\int_\Omega \left[(\nabla \cdot \mathbf{u}) \,p + \mathbf{u} \cdot \nabla p\right] \,d\Omega = 
+\int_\Omega \nabla \cdot (p\mathbf{u})\,d\Omega = \int_{\partial\Omega}(\mathbf{u}\cdot \mathbf{n})\,p\,d\sigma
+\]</div>
+<p>from which thesis follows.</p>
+</div>
+</section>
+<section id="weak-formulations">
+<h2>Weak Formulations<a class="headerlink" href="#weak-formulations" title="Link to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(\Omega\subset\mathbb{R}^{d}\)</span> with <span class="math notranslate nohighlight">\(d=2,3\)</span> and <span class="math notranslate nohighlight">\(\partial \Omega = \Gamma_D\cup\Gamma_N\)</span> its boundary, let us consider the following problem (in strong form):</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\left\{
+    \begin{array}{ll}
+        -\Delta u = f &amp; \mbox{in } \Omega\\
+        u = u_D &amp; \mbox{on } \Gamma_D\\
+        \displaystyle \frac{\partial u}{\partial \mathbf{n}} = g_N &amp; \mbox{on } \Gamma_N
+    \end{array}
+\right.
+\end{equation*}\]</div>
+<p>We have a PDE to solve with its boundary condition (BC) associated. The strong solution must be differentiable twice in classical sense and, in general, it is not always possible to prove the well-posedness of these problems. Therefore, it comes the necessity to look for the solution into a broader functional space. Without entering into too much details on this topic, this sections aims to present the typical procedure to be followed when a weak formulation must be derived (its necessary to assemble the algebraic system coming from the Finite element method).</p>
+<p>Let <span class="math notranslate nohighlight">\(\mathcal{V}\subset\mathcal{H}^1, \mathcal{V}_0\subset\mathcal{H}^1\)</span> the trial and test space defined as</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{V} = \left\{v\in\mathcal{H}^1:\;\left. v\right|_{\Gamma_D} = u_D\right\}\qquad 
+\mathcal{V}_0 = \left\{v\in\mathcal{H}^1:\;\left. v\right|_{\Gamma_D} = 0\right\}
+\]</div>
+<p>Given <span class="math notranslate nohighlight">\(v\in\mathcal{V}_0\)</span>, the PDE is multipied (in <span class="math notranslate nohighlight">\(L^2\)</span> sense) by <span class="math notranslate nohighlight">\(v\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\int_\Omega -\Delta u\,v \,d\Omega=\int_\Omega f\,v\,d\Omega\qquad v\in\mathcal{V}_0
+\]</div>
+<p>and by applying the integration by parts formula and the effect of the BCs</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\int_\Omega \nabla u\cdot \nabla v \,d\Omega=\int_\Omega f\,v\,d\Omega+\int_{\Gamma_N}g\,v\,d\sigma\qquad v\in\mathcal{V}_0
+\end{equation*}\]</div>
+<section id="galerkin-approximation">
+<h3>Galerkin approximation<a class="headerlink" href="#galerkin-approximation" title="Link to this heading"></a></h3>
+<p>Let us introduce a computational grid <span class="math notranslate nohighlight">\(\mathcal{T}_h\)</span> (dim<span class="math notranslate nohighlight">\(\mathcal{T}_h = \mathcal{N}_h\)</span>) of the domain <span class="math notranslate nohighlight">\(\Omega\)</span> and the finite dimensional spaces <span class="math notranslate nohighlight">\(\mathcal{V}_h\subset\mathcal{V}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{V}_{h,0}\subset\mathcal{V}_0\)</span>. The Galerkin approximation <span id="id4">[<a class="reference internal" href="../bibliography.html#id3" title="Alfio Quarteroni. Numerical Models for Differential Problems. Springer, Cham, iii edition, 2016.">Qua16</a>, <a class="reference internal" href="../bibliography.html#id6" title="Alfio Quarteroni, Riccardo Sacco, and Fausto Saleri. Numerical Mathematics. Springer, Berlin, Heidelberg, ii edition, 2007. ISBN 978-3-540-49809-4.">QSS07</a>]</span> reads: *find <span class="math notranslate nohighlight">\(u_h\in\mathcal{V}_h\)</span> s.t.</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\int_\Omega \nabla u_h\cdot \nabla v_h \,d\Omega=\int_\Omega f_h\,v_h\,d\Omega+\int_{\Gamma_N}g\,v_h\,d\sigma\qquad v_h\in\mathcal{V}_{h,0}
+\end{equation*}\]</div>
+</section>
+<section id="finite-element-algebraic-formulation">
+<h3>Finite element algebraic formulation<a class="headerlink" href="#finite-element-algebraic-formulation" title="Link to this heading"></a></h3>
+<p>The finite dimensional formulation is necessary to assemble the associated linear system.
+Let us consider the homogeneous Dirichlet case, <span class="math notranslate nohighlight">\(u_D = 0\)</span> (to which we can
+always reduce through a lifting procedure), and let us introduce a basis <span class="math notranslate nohighlight">\(\left\{\phi_j\right\}_{j=1}^{\mathcal{N}_h}\)</span> such that any function <span class="math notranslate nohighlight">\(u_h\in\mathcal{V}_h\)</span> can be expressed as a linear combination of the basis functions</p>
+<div class="math notranslate nohighlight">
+\[
+u_h(\mathbf{x}) = \sum_{j=1}^{\mathcal{N}_h}\alpha_j \phi_j(\mathbf{x})
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The choice of the basis functions results in different versions of the algebraic system. The most natural choice is given by the <strong>hat functions</strong> <span id="id5">[<a class="reference internal" href="../bibliography.html#id6" title="Alfio Quarteroni, Riccardo Sacco, and Fausto Saleri. Numerical Mathematics. Springer, Berlin, Heidelberg, ii edition, 2007. ISBN 978-3-540-49809-4.">QSS07</a>]</span>.</p>
+</div>
+<p>By taking <span class="math notranslate nohighlight">\(v_h=\phi_k\)</span> as the test function, the Galerkin problem reduces to</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\int_\Omega \nabla u_h\cdot \nabla \phi_k \,d\Omega=\int_\Omega f_h\,\phi_k\,d\Omega+\int_{\Gamma_N}g\,\phi_k\,d\sigma\qquad k = 1, \dots, \mathcal{N}_h
+\end{equation*}\]</div>
+<p>then, the linear expansion can be introduced into the problem which results</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{j=1}^{\mathcal{N}_h}\alpha_j \int_\Omega \nabla \phi_j\cdot \nabla \phi_k \,d\Omega=\int_\Omega f_h\,\phi_k\,d\Omega+\int_{\Gamma_N}g\,\phi_k\,d\sigma\qquad k = 1, \dots, \mathcal{N}_h
+\]</div>
+<p>By defining the matrix <span class="math notranslate nohighlight">\(A_{kj} = \displaystyle\int_\Omega \nabla \phi_j\cdot \nabla \phi_k \,d\Omega\)</span> and the vectors <span class="math notranslate nohighlight">\(f_k =  \displaystyle\int_\Omega f_h\,\phi_k\,d\Omega\)</span> and <span class="math notranslate nohighlight">\(g_k =  \displaystyle\int_{\Gamma_N}g\,\phi_k\,d\sigma\)</span>, the problem into the following linear system in the unknowns <span class="math notranslate nohighlight">\(\alpha_j\)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\sum_{j=1}^{\mathcal{N}_h}A_{kj}\alpha_j = f_k + g_k\qquad k = 1, \dots, \mathcal{N}_h
+\end{equation*}\]</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fluid_dyn.html" class="btn btn-neutral float-left" title="Steady Stokes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../solvers.html" class="btn btn-neutral float-right" title="Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neutronics &mdash; OFELIA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Steady Stokes" href="fluid_dyn.html" />
+    <link rel="prev" title="Theory" href="../theory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            OFELIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../theory.html">Theory</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">     Neutronics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neutron-diffusion">Neutron Diffusion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fluid_dyn.html">     Fluid Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finite_elem.html">     Finite Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../solvers.html">Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OFELIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../theory.html">Theory</a></li>
+      <li class="breadcrumb-item active">Neutronics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/neutronics.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="neutronics">
+<h1>Neutronics<a class="headerlink" href="#neutronics" title="Link to this heading"></a></h1>
+<p>The neutron Boltzmann equation, <span class="math notranslate nohighlight">\(\phi = \phi(\mathbf{x}, E,\mathbf{\Omega}, t)\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left\{
+\begin{split}
+\frac{1}{v(E)}\frac{\partial \phi}{\partial t}  =&amp;-\mathbf{\Omega}\cdot \nabla \Phi - \Sigma_{t}(\mathbf{x}, E, t)\,\phi \\
+&amp;+\chi_g(E)\,(1-\beta)\int_{4\pi}\int_0^{+\infty}\bar{\nu}(E')\Sigma_{f}(\mathbf{x},E',t)\,\phi'\,dE'd\mathbf{\Omega}'\\
+&amp;+\int_{4\pi}\int_0^{+\infty}\Sigma(\mathbf{x}, E'\rightarrow E, \mathbf{\Omega}'\rightarrow \mathbf{\Omega}, t)\,\phi' \,dE'd\mathbf{\Omega}'+\sum_{j=1}^J\chi^{d_j}(E)\lambda_jC_j(\mathbf{x}, E, t)\\
+\frac{\partial C_j(\mathbf{x}, E, t)}{\partial t} =&amp; -\lambda_jC_j(\mathbf{x},E, t)+\beta_j\int_{4\pi}\int_0^{+\infty}\bar{\nu}(E')\Sigma_{f}(\mathbf{x},E',t)\,\phi'\,dE'd\mathbf{\Omega}'
+\end{split}
+\right.
+\end{split}\]</div>
+<p>This system of <span class="math notranslate nohighlight">\(J+1\)</span> equations are linear (if no thermal feedback are considered) and different discretisatio techniques can be used to solve it.</p>
+<p>In this repository, the multigroup diffusion approximation is used</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left\{
+\begin{aligned}
+    \frac{1}{v_g}\frac{\partial\phi_g}{\partial t}=&amp;+\nabla\cdot(D_g\nabla \phi_g)-\left(\Sigma_{a,g}+\sum_{g'\neq g}\Sigma_{s,g\rightarrow g'} + D_g B_{z,g}^2\right)\phi_g\\
+    &amp;+\sum_{g'\neq g}\Sigma_{s,g'\rightarrow g}\phi_{g'}+\chi_g\left(\frac{1-\beta}{k_{\text{eff}}}\sum_{g'}\nu_{g'}\Sigma_{f,g'}\phi_{g'}+\sum_{j=1}^J\lambda_jc_j\right)\\
+    \frac{\partial c_j}{\partial t} =&amp;  \frac{\beta_j}{k_{\text{eff}}}\sum_{g}\nu_g\Sigma_{f,g}\phi_{g} - \lambda_jc_j
+\end{aligned}
+\right.
+\end{split}\]</div>
+<p>as well as a P1 and P3 implementation for 1D problems.</p>
+<p>The governing equations are derived by performing mass balances and considering all possible ways neutrons can be born, be transferred and die. More details can be found in <span id="id1">[<a class="reference internal" href="../bibliography.html#id7" title="James J. Duderstadt and Louis J. Hamilton. Nuclear reactor analysis. Wiley New York, 1976. ISBN 0471223638.">DH76</a>]</span>.</p>
+<section id="neutron-diffusion">
+<h2>Neutron Diffusion<a class="headerlink" href="#neutron-diffusion" title="Link to this heading"></a></h2>
+<p>The stationary version of the multi-group diffusion equation is an eigenvalue-eigenfunction problem for the effective multiplication factor <span class="math notranslate nohighlight">\(k_{\text{eff}}\)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+-\nabla\cdot(D_g\nabla \phi_g)+\left(\Sigma_{a,g}+\sum_{g'\neq g}\Sigma_{s,g\rightarrow g'} + D_g B_{z,g}^2\right)\phi_g-\sum_{g'\neq g}\Sigma_{s,g'\rightarrow g}\phi_{g'}=\frac{1}{k_{\text{eff}}}\cdot \chi_g^p\sum_{g'}\nu_{g'}\Sigma_{f,g'}\phi_{g'}
+\end{equation*}\]</div>
+<p>for <span class="math notranslate nohighlight">\(g=1,\ dots, G\)</span>. Its algebraic formulation has the following form</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\mathbb{A}\boldsymbol{\phi} = \frac{1}{k_{\text{eff}}}
+\mathbb{B}\boldsymbol{\phi}
+\end{equation*}\]</div>
+<p>Whereas, the transient problem is completed by another set of equations related to the precursors</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\left\{
+\begin{split}
+\frac{1}{v_g}\frac{\partial\phi_g}{\partial t}=&amp;+\nabla\cdot(D_g\nabla \phi_g)-\left(\Sigma_{a,g}+\sum_{g'\neq g}\Sigma_{s,g\rightarrow g'} + D_g B_{z,g}^2\right)\phi_g\\
+    &amp;+\sum_{g'\neq g}\Sigma_{s,g'\rightarrow g}\phi_{g'}+\chi_g^p\frac{1-\beta}{k_{\text{eff}}}\sum_{g'}\nu_{g'}\Sigma_{f,g'}\phi_{g'}+\sum_{j=1}^J\chi_g^{d_j}\lambda_jc_j\\
+\frac{\partial C_j}{\partial t}=&amp;-\lambda_jC_j+\beta_j\sum_{g=1}^G\nu_{g'}\Sigma_{g',f}\phi_{g'}\qquad \text{ for }j= 1, \dots J
+\end{split}
+\right.
+\end{equation*}\]</div>
+<p>Adopting an implicit Euler scheme for time-advancement, the linear problem at each time step is</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\left\{
+\begin{aligned}
+    \mathbb{V}\frac{\boldsymbol{\Phi}_{i+1} - \boldsymbol{\Phi}_{i}}{\Delta t}&amp;=-\mathbb{A}\boldsymbol{\phi}_{i+1} + \frac{1}{k_{\text{eff}}}
+    \mathbb{B}\boldsymbol{\phi}_{i+1}+\mathbb{D}\boldsymbol{c}_{i+1}\\
+    \frac{\boldsymbol{c}_{i+1} - \boldsymbol{c}_{i}}{\Delta t} &amp;= \frac{1}{k_{\text{eff}}}\mathbb{B}^*\boldsymbol{\phi}_{i+1}-\mathbb{D}^*\boldsymbol{c}_{i+1}
+\end{aligned}
+\right.
+\end{equation*}\]</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../theory.html" class="btn btn-neutral float-left" title="Theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fluid_dyn.html" class="btn btn-neutral float-right" title="Steady Stokes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Loi &amp; Stefano Riva, Carolina Introini, Antonio Cammi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
