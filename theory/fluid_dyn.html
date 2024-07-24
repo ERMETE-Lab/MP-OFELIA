@@ -124,8 +124,8 @@ Let <span class="math notranslate nohighlight">\(\mathcal{V}\subset[\mathcal{H}^
 \int_\Omega q \nabla\cdot \mathbf{u}\,d\Omega=0
 \]</div>
 <p>Imposing the boundary conditions, the weak formulation reads: <em>find <span class="math notranslate nohighlight">\((\mathbf{u}, p)\in\mathcal{V}\times\mathcal{Q}\)</span> s.t.</em></p>
-<div class="amsmath math notranslate nohighlight" id="equation-845228fd-3708-4896-bc24-d58a9e396879">
-<span class="eqno">(1)<a class="headerlink" href="#equation-845228fd-3708-4896-bc24-d58a9e396879" title="Permalink to this equation"></a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-32f6e9ef-b97d-4875-812a-9944972007a9">
+<span class="eqno">(1)<a class="headerlink" href="#equation-32f6e9ef-b97d-4875-812a-9944972007a9" title="Permalink to this equation"></a></span>\[\begin{equation}
 \int_\Omega \nu\nabla \mathbf{u}\cdot \nabla\mathbf{v}\,d\Omega -\int_\Omega p \nabla\cdot \mathbf{v}\,d\Omega - \int_\Omega q \nabla\cdot \mathbf{u}\,d\Omega =  \int_{\Gamma_N} g\mathbf{n}\cdot \mathbf{v}\,d\sigma \qquad \forall (\mathbf{v}, q)\in\mathcal{V}_0\times\mathcal{Q}
 \end{equation}\]</div>
 <section id="derivation-of-the-linear-system">
@@ -133,8 +133,8 @@ Let <span class="math notranslate nohighlight">\(\mathcal{V}\subset[\mathcal{H}^
 <p>When the finite dimensional spaces are introduced an important remark should be made. The Galerkin problem has a stable solution <span class="math notranslate nohighlight">\((\mathbf{u}_h,p_h)\)</span> if the finite dimensional spaces are <em>inf-sup</em> compatible. In fact, there exists a connection between the finite dimensional functional space of velocity and pressure referred to as the Taylor-Hood compatible spaces.
 In order to have a stable solution <span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="Alfio Quarteroni. Numerical Models for Differential Problems. Springer, Cham, iii edition, 2016.">Qua16</a>]</span>, the most common couple is given by parabolic FE <span class="math notranslate nohighlight">\(P2\)</span> for the velocity and linear finite element for pressure <span class="math notranslate nohighlight">\(P1\)</span>.</p>
 <p>Let us consider the finite dimensional representation of the spaces (using Taylor-Hood elements), the correspondent linear system results in</p>
-<div class="amsmath math notranslate nohighlight" id="equation-4bff188a-2fe2-4420-989f-61a9098ce7e8">
-<span class="eqno">(2)<a class="headerlink" href="#equation-4bff188a-2fe2-4420-989f-61a9098ce7e8" title="Permalink to this equation"></a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-933f44b2-23ff-44ce-bc16-40fb5c4b2b88">
+<span class="eqno">(2)<a class="headerlink" href="#equation-933f44b2-23ff-44ce-bc16-40fb5c4b2b88" title="Permalink to this equation"></a></span>\[\begin{equation}
 \left[
 \begin{array}{cc}
 A &amp; B^T \\ B &amp; 0
