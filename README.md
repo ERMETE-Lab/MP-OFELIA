@@ -5,10 +5,12 @@
 
 This repository collects the supporting code for OFELIA (Openmc-FEnicsx for muLtiphysics tutorIAl): an open-source tool to simulate multi-physics nuclear cases adopting [OpenMC (v 0.13.2)](https://openmc.org/) and [FEniCSx (v. 0.6.0)](https://fenicsproject.org/) for Python. Moreover, useful tutorials are available for the single-physics codes OpenMC and FEniCSx.
 
---------------------------------
-**In the coming months, the code files supporting the findings will be published here once the peer-review process of the related journal article will be completed.**
+The aim of this repository consists in collecting tutorials for FEniCSx and OpenMC, and their coupling version (OFELIA), specific to nuclear reactors applications. In particular, the former FEniCSx collects the following:
 
---------------------------------
+- Fluid Dynamics: cavity, backward facing step and laminar flow over cylinder.
+- Neutronics (MultiGroup Diffusion): ANL benchmarks and MultiPhysics application
+
+whereas, the OpenMC tutorial implements the simulation of a TRIGA reactor.
 
 ## How to cite
 If you use this code in your research, please cite the following paper
