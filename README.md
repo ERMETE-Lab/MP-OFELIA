@@ -13,22 +13,23 @@ The aim of this repository consists in collecting tutorials for FEniCSx and Open
 whereas, the OpenMC tutorial implements the simulation of a TRIGA reactor.
 
 ## How to cite
-If you use this code in your research, please cite the following paper
+If you use this set of codes in your research, please cite the following paper
 
-- Loi, L., Riva, S., Introini, C., Giacobbo, F., Wang, X., & Cammi, A. (2024). OFELIA: an OpenMC-FEniCSx Coupling for Neutronic Calculation with Temperature Feedback. Submitted to Nuclear Engineering and Design.
+- L. Loi, S. Riva, C. Introini, F. Giacobbo, X. Wang, and A. Cammi, “OFELIA: An OpenMC-FEniCSx coupling for neutronic calculation with temperature feedback,” Nuclear Engineering and Design, vol. 428, p. 113480, 2024.
 
 Here reported in `.bib` format
 ```latex
-@article{OFELIA_2024,
-title = {{OFELIA: an OpenMC-FEniCSx Coupling for Neutronic Calculation with Temperature Feedback}},
-journal = {submitted to Nuclear Engineering and Design},
-volume = {},
-pages = {},
+@article{LOI2024113480,
+title = {OFELIA: An OpenMC-FEniCSx coupling for neutronic calculation with temperature feedback},
+journal = {Nuclear Engineering and Design},
+volume = {428},
+pages = {113480},
 year = {2024},
-issn = {},
-doi = {},
-url = {},
+issn = {0029-5493},
+doi = {https://doi.org/10.1016/j.nucengdes.2024.113480},
+url = {https://www.sciencedirect.com/science/article/pii/S0029549324005806},
 author = {Lorenzo Loi and Stefano Riva and Carolina Introini and Francesca Giacobbo and Xiang Wang and Antonio Cammi},
+keywords = {OpenMC, FEniCSx, Nuclear reactor, Monte Carlo, Thermal hydraulics},
 }
 ```
 
