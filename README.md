@@ -10,7 +10,7 @@ The aim of this repository consists in collecting tutorials for FEniCSx and Open
 - Fluid Dynamics: cavity, backward facing step and laminar flow over cylinder.
 - Neutronics (MultiGroup Diffusion): ANL benchmarks and MultiPhysics application
 
-whereas, the OpenMC tutorial implements the simulation of a TRIGA reactor.
+whereas, the OpenMC model of the TRIGA Mark II reactor, previously hosted here, has moved to [ERMETE-Lab/openmc-models](https://github.com/ERMETE-Lab/openmc-models/tree/main/TRIGA).
 
 ## How to cite
 If you use this set of codes in your research, please cite the following paper

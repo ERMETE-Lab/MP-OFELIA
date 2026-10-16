@@ -33,10 +33,7 @@ Neutronics
 OpenMC
 ------------
 
-.. toctree::
-    :maxdepth: 1
-
-    TRIGA Mark II Reactor <Tutorials/openmc/TRIGA/triga.ipynb>
+The OpenMC model of the TRIGA Mark II reactor has moved to the `openmc-models <https://github.com/ERMETE-Lab/openmc-models/tree/main/TRIGA>`_ repository.
 
 
 OFELIA
